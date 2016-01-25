@@ -1,21 +1,111 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-             xmlns:tools="http://schemas.android.com/tools"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:background="#0099cc"
-             tools:context="cz.lhoracek.android.dials.FullscreenActivity">
+<android.support.percent.PercentRelativeLayout
+    android:id="@+id/layout_main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black"
+    android:keepScreenOn="true"
+    tools:context="cz.lhoracek.android.dials.FullscreenActivity">
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc. -->
+    <cz.lhoracek.android.dials.views.RPMView
+        android:id="@+id/rpmView_revsGraph"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="70%"
+        app:layout_marginLeftPercent="0%"
+        app:layout_marginTopPercent="5%"
+        app:layout_widthPercent="90%"
+        app:scaleColor="@color/scale"
+        app:scaleColorAccent="@color/scaleAccent"
+        app:scaleOffColor="@color/scaleOff"
+        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+
+
+    <cz.lhoracek.android.dials.views.DialView
+        android:id="@+id/dialView_voltage"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="25%"
+        app:layout_marginLeftPercent="2%"
+        app:layout_marginTopPercent="80%"
+        app:layout_widthPercent="15%"
+        app:scaleColor="@color/scale"
+        app:scaleColorAccent="@color/scaleAccent"
+        app:scaleOffColor="@color/scaleOff"
+        app:scaleOffColorAccent="@color/scaleOffAccent"
+        app:title="@string/title_voltage"
+        />
+
+
+    <cz.lhoracek.android.dials.views.DialView
+        android:id="@+id/dialView_oilTemp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="25%"
+        app:layout_marginLeftPercent="20%"
+        app:layout_marginTopPercent="80%"
+        app:layout_widthPercent="15%"
+        app:scaleColor="@color/scale"
+        app:scaleColorAccent="@color/scaleAccent"
+        app:scaleOffColor="@color/scaleOff"
+        app:scaleOffColorAccent="@color/scaleOffAccent"
+        app:title="@string/title_oil_temp"
+        />
+
+    <cz.lhoracek.android.dials.views.TextViewPlus
+        android:id="@+id/textView_gear"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="left"
+        android:text="5"
+        android:textColor="@color/numberColor"
+        android:textSize="120dp"
+        app:customFont="digital.ttf"
+        app:layout_marginLeftPercent="2%"
+        app:layout_marginTopPercent="2%"
+        />
+
+
     <TextView
-        android:id="@+id/fullscreen_content"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:keepScreenOn="true"
-        android:text="@string/dummy_content"
-        android:textColor="#33b5e5"
-        android:textSize="50sp"
-        android:textStyle="bold"/>
-</FrameLayout>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_gear"
+        android:textAllCaps="true"
+        android:textColor="@color/titleColor"
+        android:textSize="15dp"
+        app:layout_marginLeftPercent="3%"
+        app:layout_marginTopPercent="30%"
+        />
+
+    <cz.lhoracek.android.dials.views.TextViewPlus
+        android:id="@+id/textView_speed"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="155"
+        android:textColor="@color/numberColor"
+        android:textSize="200dp"
+        app:customFont="digital.ttf"
+        app:layout_marginLeftPercent="30%"
+        app:layout_marginTopPercent="30%"
+        app:layout_widthPercent="50%"
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/unit_speed"
+        android:textAllCaps="true"
+        android:textColor="@color/titleColor"
+        android:textSize="15dp"
+        app:layout_marginLeftPercent="74%"
+        app:layout_marginTopPercent="30%"
+        />
+
+</android.support.percent.PercentRelativeLayout>

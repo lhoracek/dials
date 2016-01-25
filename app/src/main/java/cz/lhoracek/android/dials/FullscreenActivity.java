@@ -9,8 +9,7 @@ import android.view.View;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity implements
-        View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
+public class FullscreenActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
 
     private View mDecorView;
     private View mMainView;
@@ -30,7 +29,7 @@ public class FullscreenActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_fullscreen);
         mDecorView = getWindow().getDecorView();
 
-        mMainView = findViewById(R.id.fullscreen_content);
+        mMainView = findViewById(R.id.layout_main);
         mMainView.setClickable(true);
 
         mDecorView.setOnSystemUiVisibilityChangeListener(this);
@@ -40,17 +39,14 @@ public class FullscreenActivity extends AppCompatActivity implements
     }
 
     protected void enableFullScreen(boolean enabled) {
-        int newVisibility =  View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
+        int newVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
-        if(enabled) {
-            newVisibility |= View.SYSTEM_UI_FLAG_FULLSCREEN
-                    |  View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (enabled) {
+            newVisibility |= View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
         }
 
         // Want to hide again after 3s
-        if(!enabled) {
+        if (!enabled) {
             resetHideTimer();
         }
 
@@ -73,8 +69,7 @@ public class FullscreenActivity extends AppCompatActivity implements
 
     @Override
     public void onSystemUiVisibilityChange(int visibility) {
-        if((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0
-                     && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
+        if ((mLastSystemUIVisibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) != 0 && (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0) {
             resetHideTimer();
         }
         mLastSystemUIVisibility = visibility;

@@ -1,9 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#03a9f4</color>
-    <color name="colorPrimaryDark">#80000000</color>
-    <color name="colorAccent">#536dfe</color>
+    <color name="colorPrimaryDark">#004f71</color>
+    <color name="colorAccent">#7bc6e7</color>
 
     <color name="black_overlay">#66000000</color>
     <color name="colorNavigationBar">#80000000</color>
+    <color name="colorStatusBar">#80000000</color>
+
+    <color name="scale">#03a9f4</color>
+    <color name="scaleAccent">#7bc6e7</color>
+    <color name="scaleOff">#1effffff</color>
+    <color name="scaleOffAccent">#32ffffff</color>
+
+    <color name="titleColor">#8dffffff</color>
+    <color name="numberColor">#03a9f4</color>
+
+    <color name="black">#000000</color>
 </resources>

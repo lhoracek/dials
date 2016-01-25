@@ -15,14 +15,11 @@ import cz.lhoracek.android.dials.R;
 /**
  * Created by lhoracek on 1/25/16.
  */
-public class RPMView extends View {
+public class DialView extends View {
 
-    private static final float WIDTH          = 0.07f;
-    private static final int   STRAIGHT_LINES = 9;
-    private static final float STEP           = 2f;
-    private static final float PAUSE          = 0.5f;
-    private static final int   START_ANGLE    = 195;
-    private static final int   SWEEP_ANGLE    = 90;
+    private static final float WIDTH       = 0.2f;
+    private static final int   START_ANGLE = 180;
+    private static final int   SWEEP_ANGLE = 180;
 
     private Paint mPaint       = new Paint();
     private int   mColor       = Color.WHITE;
@@ -31,16 +28,17 @@ public class RPMView extends View {
     private int mColorOff       = Color.GRAY;
     private int mColorOffAccent = Color.WHITE;
 
-    private int mMinValue = 0;
-    private int mMaxValue = 13000;
-    private int mValue    = 6000;
+    private int    mMinValue = 0;
+    private int    mMaxValue = 13000;
+    private int    mValue    = 6000;
+    private String title     = "";
 
-    public RPMView(Context context, AttributeSet attrs) {
+    public DialView(Context context, AttributeSet attrs) {
         super(context, attrs);
         readColor(context, attrs);
     }
 
-    public RPMView(Context ctx) {
+    public DialView(Context ctx) {
         super(ctx);
     }
 
@@ -72,19 +70,20 @@ public class RPMView extends View {
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {
-        int degreeRPM = mMaxValue / SWEEP_ANGLE;
-        for (int i = 0; i < (SWEEP_ANGLE); i += STEP) {
-            drawArc(canvas, i + START_ANGLE, STEP - PAUSE, mPaint, (mValue > ((i + 1) * degreeRPM)) ? mColor : mColorOff, (mValue > ((i + 1) * degreeRPM)) ? mColorAccent : mColorOffAccent);
-        }
+        int range = mMaxValue - mMinValue;
+        float value = (float) mValue / (float) range;
+
+        drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff, mColorOffAccent);
+        drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor, mColorAccent);
     }
 
     private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor, int accentcolor) {
-        int ovalWidth = getWidth() * 3 / 2;
-        int ovalHeight = getHeight() * 2;
+        int ovalWidth = getWidth();
+        int ovalHeight = getHeight();
 
         paint.setColor(mainColor);
         Path path = new Path();
-        path.arcTo(new RectF(ovalWidth * WIDTH, ovalWidth * WIDTH, ovalWidth * (1 - WIDTH), ovalHeight - (ovalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
+        path.arcTo(new RectF(ovalWidth * WIDTH, ovalHeight * WIDTH, ovalWidth - (ovalWidth * WIDTH), ovalHeight - (ovalHeight * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
         path.arcTo(new RectF(0, 0, ovalWidth, ovalHeight), startAngle, sweepDegrees);
         // innerCircle.
         path.close();
@@ -97,7 +96,6 @@ public class RPMView extends View {
 
         // innerCircle.
         path2.close();
-        canvas.drawPath(path2, paint);
-
+        //canvas.drawPath(path2, paint);
     }
 }

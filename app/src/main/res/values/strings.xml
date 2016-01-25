@@ -1,8 +1,15 @@
 <resources>
     <string name="app_name">Dials</string>
 
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content">DUMMY\nCONTENT</string>
 
     <string name="title_activity_fullscreen">FullscreenActivity</string>
+
+    <string name="title_voltage">Voltage</string>
+    <string name="title_oil_temp">Oil</string>
+    <string name="title_gear">Gear</string>
+
+
+    <string name="unit_rpm">rpm</string>
+    <string name="unit_speed">km/h</string>
+
 </resources>
