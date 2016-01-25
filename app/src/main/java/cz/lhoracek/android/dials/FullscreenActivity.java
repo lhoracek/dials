@@ -4,6 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.TextView;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import cz.lhoracek.android.dials.views.BarView;
+import cz.lhoracek.android.dials.views.ControlView;
+import cz.lhoracek.android.dials.views.DialView;
+import cz.lhoracek.android.dials.views.RPMView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -23,6 +31,23 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         }
     };
 
+    @Bind(R.id.barView_fuel) BarView barViewFuel;
+    @Bind(R.id.barView_temp) BarView barViewTemp;
+
+    @Bind(R.id.dialView_oilTemp) DialView dialViewOilTemp;
+    @Bind(R.id.dialView_voltage) DialView dialViewVoltage;
+
+    @Bind(R.id.rpmView_revsGraph) RPMView rpmView;
+
+    @Bind(R.id.textView_speed) TextView textViewSpeed;
+    @Bind(R.id.textView_gear)  TextView textViewGear;
+
+    @Bind(R.id.control_highBeam) ControlView controlViewHighBeam;
+    @Bind(R.id.control_lowBeam)  ControlView controlViewLowBeam;
+    @Bind(R.id.control_ignition) ControlView controlViewIgnition;
+    @Bind(R.id.control_neutral)  ControlView controlViewNeutral;
+    @Bind(R.id.control_turn)     ControlView controlViewTurn;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +61,17 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         mMainView.setOnClickListener(this);
 
         enableFullScreen(true);
+        ButterKnife.bind(this);
+
+
+        // TODO
+        rpmView.setValue(7000);
+        barViewFuel.setValue(60);
+        barViewTemp.setValue(90);
+
+        controlViewLowBeam.setEnabled(true);
+        controlViewHighBeam.setEnabled(true);
+        controlViewNeutral.setEnabled(true);
     }
 
     protected void enableFullScreen(boolean enabled) {

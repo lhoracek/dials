@@ -1,60 +1,29 @@
 package cz.lhoracek.android.dials.views;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
-import android.view.View;
-
-import cz.lhoracek.android.dials.R;
 
 /**
  * Created by lhoracek on 1/25/16.
  */
-public class DialView extends View {
+public class DialView extends ValueView {
 
     private static final float WIDTH       = 0.2f;
     private static final int   START_ANGLE = 180;
     private static final int   SWEEP_ANGLE = 180;
 
-    private Paint mPaint       = new Paint();
-    private int   mColor       = Color.WHITE;
-    private int   mColorAccent = Color.WHITE;
-
-    private int mColorOff       = Color.GRAY;
-    private int mColorOffAccent = Color.WHITE;
-
-    private int    mMinValue = 0;
-    private int    mMaxValue = 13000;
-    private int    mValue    = 6000;
-    private String title     = "";
-
     public DialView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        readColor(context, attrs);
     }
 
     public DialView(Context ctx) {
         super(ctx);
     }
 
-    private void readColor(Context ctx, AttributeSet attrs) {
-        TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.DialView);
-        mColor = a.getColor(R.styleable.DialView_scaleColor, Color.WHITE);
-        mColorAccent = a.getColor(R.styleable.DialView_scaleColorAccent, Color.WHITE);
-        mColorOff = a.getColor(R.styleable.DialView_scaleOffColor, Color.BLACK);
-        mColorOffAccent = a.getColor(R.styleable.DialView_scaleOffColorAccent, Color.BLACK);
-        a.recycle();
-    }
-
-    @Override
-    public void onSizeChanged(int nw, int nh, int ow, int oh) {
-        super.onSizeChanged(nw, nh, ow, oh);
-    }
 
     @Override
     public void onDraw(Canvas c) {
@@ -62,16 +31,17 @@ public class DialView extends View {
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
         drawArcs(c, mPaint);
-    }
-
-    public void setValue(int value) {
-        this.mValue = value;
-        invalidate();
+        int xPos = (c.getWidth() / 2);
+        int yPos = (int) ((c.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2));
+        //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
+        mPaint.setTextAlign(Paint.Align.CENTER);
+        mPaint.setTextSize(getHeight() * WIDTH);
+        c.drawText(Float.toString(mValue), xPos, yPos, mPaint);
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {
-        int range = mMaxValue - mMinValue;
-        float value = (float) mValue / (float) range;
+        float range = mMaxValue - mMinValue;
+        float value = Math.max(0,mValue - mMinValue) / range;
 
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff, mColorOffAccent);
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor, mColorAccent);

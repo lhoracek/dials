@@ -20,6 +20,8 @@
         app:layout_marginLeftPercent="0%"
         app:layout_marginTopPercent="5%"
         app:layout_widthPercent="90%"
+        app:maxValue="13000"
+        app:minValue="0"
         app:scaleColor="@color/scale"
         app:scaleColorAccent="@color/scaleAccent"
         app:scaleOffColor="@color/scaleOff"
@@ -34,13 +36,14 @@
         app:layout_marginLeftPercent="2%"
         app:layout_marginTopPercent="80%"
         app:layout_widthPercent="15%"
+        app:maxValue="15"
+        app:minValue="11"
         app:scaleColor="@color/scale"
         app:scaleColorAccent="@color/scaleAccent"
         app:scaleOffColor="@color/scaleOff"
         app:scaleOffColorAccent="@color/scaleOffAccent"
         app:title="@string/title_voltage"
         />
-
 
     <cz.lhoracek.android.dials.views.DialView
         android:id="@+id/dialView_oilTemp"
@@ -50,6 +53,8 @@
         app:layout_marginLeftPercent="20%"
         app:layout_marginTopPercent="80%"
         app:layout_widthPercent="15%"
+        app:maxValue="100"
+        app:minValue="0"
         app:scaleColor="@color/scale"
         app:scaleColorAccent="@color/scaleAccent"
         app:scaleOffColor="@color/scaleOff"
@@ -107,5 +112,115 @@
         app:layout_marginLeftPercent="74%"
         app:layout_marginTopPercent="30%"
         />
+
+    <cz.lhoracek.android.dials.views.BarView
+        android:id="@+id/barView_temp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="40%"
+        app:layout_marginLeftPercent="93%"
+        app:layout_marginTopPercent="5%"
+        app:layout_widthPercent="5%"
+        app:maxValue="120"
+        app:minValue="60"
+        app:scaleColor="@color/scale"
+        app:scaleColorAccent="@color/scaleAccent"
+        app:scaleOffColor="@color/scaleOff"
+        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+
+    <cz.lhoracek.android.dials.views.BarView
+        android:id="@+id/barView_fuel"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="40%"
+        app:layout_marginLeftPercent="93%"
+        app:layout_marginTopPercent="55%"
+        app:layout_widthPercent="5%"
+        app:maxValue="100"
+        app:minValue="0"
+        app:scaleColor="@color/scale"
+        app:scaleColorAccent="@color/scaleAccent"
+        app:scaleOffColor="@color/scaleOff"
+        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+
+    <cz.lhoracek.android.dials.views.ControlView
+        android:id="@+id/control_lowBeam"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:controlIcon="@drawable/lights51"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="64%"
+        app:layout_marginTopPercent="83%"
+        app:layout_widthPercent="7%"
+        app:scaleColor="@color/controlGreen"
+        app:scaleOffColor="@color/scaleOff"/>
+
+    <cz.lhoracek.android.dials.views.ControlView
+        android:id="@+id/control_highBeam"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:controlIcon="@drawable/lights50"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="72%"
+        app:layout_marginTopPercent="83%"
+        app:layout_widthPercent="7%"
+        app:scaleColor="@color/controlBlue"
+        app:scaleOffColor="@color/scaleOff"/>
+
+    <cz.lhoracek.android.dials.views.ControlView
+        android:id="@+id/control_ignition"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:controlIcon="@drawable/engine2"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="56%"
+        app:layout_marginTopPercent="83%"
+        app:layout_widthPercent="7%"
+        app:scaleColor="@color/controlRed"
+        app:scaleOffColor="@color/scaleOff"/>
+
+    <cz.lhoracek.android.dials.views.ControlView
+        android:id="@+id/control_neutral"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:controlIcon="@drawable/greek44"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="48%"
+        app:layout_marginTopPercent="83%"
+        app:layout_widthPercent="7%"
+        app:scaleColor="@color/controlGreen"
+        app:scaleOffColor="@color/scaleOff"/>
+
+    <cz.lhoracek.android.dials.views.ControlView
+        android:id="@+id/control_turn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:controlIcon="@drawable/arrow216"
+        app:layout_heightPercent="12%"
+        app:layout_marginLeftPercent="40%"
+        app:layout_marginTopPercent="83%"
+        app:layout_widthPercent="7%"
+        app:scaleColor="@color/controlGreen"
+        app:scaleOffColor="@color/scaleOff"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/temperature16"
+        android:tint="@color/colorPrimary"
+        app:layout_heightPercent="8%"
+        app:layout_marginLeftPercent="87%"
+        app:layout_marginTopPercent="37%"
+        app:layout_widthPercent="5%"/>
+
+    <ImageView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/pump1"
+        android:tint="@color/colorPrimary"
+        app:layout_heightPercent="8%"
+        app:layout_marginLeftPercent="87%"
+        app:layout_marginTopPercent="55%"
+        app:layout_widthPercent="5%"/>
 
 </android.support.percent.PercentRelativeLayout>

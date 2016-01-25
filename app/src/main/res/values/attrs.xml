@@ -3,11 +3,14 @@
         <attr name="customFont" format="string"/>
     </declare-styleable>
 
-    <declare-styleable name="DialView">
+    <declare-styleable name="ValueView">
         <attr name="scaleColor" format="color"/>
         <attr name="scaleColorAccent" format="color"/>
         <attr name="scaleOffColor" format="color"/>
         <attr name="scaleOffColorAccent" format="color"/>
         <attr name="caption" format="string"/>
+        <attr name="maxValue" format="float"/>
+        <attr name="minValue" format="float"/>
+        <attr name="controlIcon" format="integer"/>
     </declare-styleable>
 </resources>
