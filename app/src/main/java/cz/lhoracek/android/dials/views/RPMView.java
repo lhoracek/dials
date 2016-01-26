@@ -48,9 +48,32 @@ public class RPMView extends ValueView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(4);
         paint.setColor(mScaleColor);
-        canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH)), START_ANGLE, SWEEP_ANGLE, false, paint);
+        canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH)), START_ANGLE, SWEEP_ANGLE - PAUSE, false, paint);
 
-        // TODO paint dividers
+        int stepThousand = 2;
+        float partDegrees = SWEEP_ANGLE / ((mMaxValue - mMinValue) / (stepThousand * 1000));
+        float degree = 0;
+        int thousand = 0;
+        while (degree <= SWEEP_ANGLE) {
+            for (int i = 0; i < 10; i += 3) {
+                paint.setColor(mScaleColor);
+                canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH + i, mOvalWidth * SCALE_WIDTH + i, mOvalWidth * (1 - SCALE_WIDTH) - i, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - i), START_ANGLE + degree, 0.5f, false, paint);
+            }
+
+            if (thousand % 4 == 0) {
+                Path path = new Path();
+                path.arcTo(new RectF(mOvalWidth * SCALE_WIDTH + 30, mOvalWidth * SCALE_WIDTH + 30, mOvalWidth * (1 - SCALE_WIDTH) - 30, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 30), START_ANGLE + degree + 1, 20);
+                path.close();
+                paint.setColor(mScaleColor);
+                paint.setTextAlign(Paint.Align.LEFT);
+                paint.setTextSize(30);
+
+                canvas.drawTextOnPath(String.valueOf(thousand), path, 0, 0, paint);
+            }
+
+            degree += partDegrees;
+            thousand += stepThousand;
+        }
 
         paint.setStyle(Paint.Style.FILL);
         int degreeRPM = (int) (mMaxValue / SWEEP_ANGLE);

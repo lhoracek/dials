@@ -39,7 +39,7 @@ public class DialView extends ValueView {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH);
         DecimalFormat formatter = new DecimalFormat("#,###.0");
-        c.drawText(formatter.format(mValue), xPos, yPos, mPaint);
+        c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {

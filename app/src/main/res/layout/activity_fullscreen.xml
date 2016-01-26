@@ -19,13 +19,12 @@
         app:layout_heightPercent="70%"
         app:layout_marginLeftPercent="0%"
         app:layout_marginTopPercent="5%"
-        app:layout_widthPercent="90%"
+        app:layout_widthPercent="95%"
         app:maxValue="13000"
         app:minValue="0"
         app:scaleColor="@color/scale"
         app:scaleLineColor="@color/scaleLine"
         app:scaleOffColor="@color/scaleOff"/>
-
 
     <cz.lhoracek.android.dials.views.DialView
         android:id="@+id/dialView_voltage"
@@ -81,22 +80,21 @@
         app:layout_marginLeftPercent="2%"
         app:layout_marginTopPercent="92%"
         app:layout_widthPercent="15%"
-
         />
 
     <cz.lhoracek.android.dials.views.TextViewPlus
         android:id="@+id/textView_gear"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:gravity="left"
+        android:gravity="center"
         android:text=""
         android:textColor="@color/numberColor"
         android:textSize="120dp"
         app:customFont="digital.ttf"
-        app:layout_marginLeftPercent="2%"
+        app:layout_marginLeftPercent="0%"
         app:layout_marginTopPercent="2%"
+        app:layout_widthPercent="15%"
         />
-
 
     <TextView
         android:layout_width="wrap_content"
@@ -123,41 +121,42 @@
         app:layout_widthPercent="50%"
         />
 
-
     <cz.lhoracek.android.dials.views.TextViewPlus
         android:id="@+id/textView_rpm"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/textView_speed"
         android:gravity="right"
         android:text=""
         android:textColor="@color/numberColor"
         android:textSize="40dp"
         app:customFont="digital.ttf"
-        app:layout_marginLeftPercent="10%"
-        app:layout_marginTopPercent="62%"
+        app:layout_marginLeftPercent="8%"
         app:layout_widthPercent="25%"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@id/textView_rpm"
+        android:layout_alignTop="@id/textView_rpm"
+        android:layout_marginTop="-10dp"
         android:text="@string/unit_rpm"
         android:textAllCaps="true"
         android:textColor="@color/titleColor"
         android:textSize="15dp"
-        app:layout_marginLeftPercent="30%"
-        app:layout_marginTopPercent="58%"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/textView_speed"
+        android:layout_alignTop="@id/textView_speed"
+        android:layout_marginTop="15dp"
         android:text="@string/unit_speed"
         android:textAllCaps="true"
         android:textColor="@color/titleColor"
         android:textSize="15dp"
-        app:layout_marginLeftPercent="73%"
-        app:layout_marginTopPercent="34%"
         />
 
     <cz.lhoracek.android.dials.views.BarView

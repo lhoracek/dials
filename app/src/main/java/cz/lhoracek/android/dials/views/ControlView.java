@@ -33,7 +33,7 @@ public class ControlView extends View {
 
     public void setEnabled(boolean enabled) {
         this.mEnabled = enabled;
-    }
+        invalidate();    }
 
     private void readAttributes(Context ctx, AttributeSet attrs) {
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.ValueView);

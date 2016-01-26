@@ -9,7 +9,9 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import cz.lhoracek.android.dials.tools.TestTask;
+import cz.lhoracek.android.dials.tools.ControlTestTask;
+import cz.lhoracek.android.dials.tools.DigitTestTask;
+import cz.lhoracek.android.dials.tools.GraphTestTask;
 import cz.lhoracek.android.dials.views.BarView;
 import cz.lhoracek.android.dials.views.ControlView;
 import cz.lhoracek.android.dials.views.DialView;
@@ -77,11 +79,11 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
     }
 
     private void tests() {
-        new TestTask(rpmView).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new TestTask(barViewFuel).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new TestTask(barViewTemp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new TestTask(dialViewOilTemp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new TestTask(dialViewVoltage).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new GraphTestTask(rpmView, barViewFuel, barViewTemp, dialViewOilTemp, dialViewVoltage).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new ControlTestTask(controlViewHighBeam, controlViewLowBeam, controlViewIgnition, controlViewNeutral, controlViewTurn).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new DigitTestTask(textViewGear).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, 6);
+        new DigitTestTask(textViewRpm).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 13000);
+        new DigitTestTask(textViewSpeed).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 230);
     }
 
     private void onUpdate() {
