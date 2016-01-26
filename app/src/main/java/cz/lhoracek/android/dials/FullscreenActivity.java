@@ -35,6 +35,17 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         }
     };
 
+    private final Runnable mRuntests = new Runnable() {
+        @Override
+        public void run() {
+            new GraphTestTask(rpmView, barViewFuel, barViewTemp, dialViewOilTemp, dialViewVoltage).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new ControlTestTask(controlViewHighBeam, controlViewLowBeam, controlViewIgnition, controlViewNeutral, controlViewTurn).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+            new DigitTestTask(textViewGear).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, 6);
+            new DigitTestTask(textViewRpm).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 13000);
+            new DigitTestTask(textViewSpeed).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 230);
+        }
+    };
+
     @Bind(R.id.barView_fuel) BarView barViewFuel;
     @Bind(R.id.barView_temp) BarView barViewTemp;
 
@@ -69,21 +80,12 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         ButterKnife.bind(this);
 
         if (savedInstanceState == null) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    tests();
-                }
-            }, 1000);
+            tests();
         }
     }
 
     private void tests() {
-        new GraphTestTask(rpmView, barViewFuel, barViewTemp, dialViewOilTemp, dialViewVoltage).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new ControlTestTask(controlViewHighBeam, controlViewLowBeam, controlViewIgnition, controlViewNeutral, controlViewTurn).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
-        new DigitTestTask(textViewGear).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 1, 6);
-        new DigitTestTask(textViewRpm).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 13000);
-        new DigitTestTask(textViewSpeed).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, 0, 230);
+        new Handler().postDelayed(mRuntests, 3000);
     }
 
     private void onUpdate() {

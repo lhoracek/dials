@@ -65,7 +65,7 @@
         android:textColor="@color/titleColor"
         android:textSize="15dp"
         app:layout_marginLeftPercent="20%"
-        app:layout_marginTopPercent="92%"
+        app:layout_marginTopPercent="94%"
         app:layout_widthPercent="15%"
         />
 
@@ -78,7 +78,7 @@
         android:textColor="@color/titleColor"
         android:textSize="15dp"
         app:layout_marginLeftPercent="2%"
-        app:layout_marginTopPercent="92%"
+        app:layout_marginTopPercent="94%"
         app:layout_widthPercent="15%"
         />
 
@@ -87,6 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
+        android:singleLine="true"
         android:text=""
         android:textColor="@color/numberColor"
         android:textSize="120dp"
@@ -112,6 +113,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="right"
+        android:singleLine="true"
         android:text=""
         android:textColor="@color/numberColor"
         android:textSize="200dp"
@@ -127,30 +129,33 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@id/textView_speed"
         android:gravity="right"
+        android:singleLine="true"
         android:text=""
         android:textColor="@color/numberColor"
         android:textSize="40dp"
+        android:visibility="invisible"
         app:customFont="digital.ttf"
         app:layout_marginLeftPercent="8%"
+        app:layout_marginTopPercent="10%"
         app:layout_widthPercent="25%"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@id/textView_rpm"
-        android:layout_alignTop="@id/textView_rpm"
-        android:layout_marginTop="-10dp"
+        android:layout_alignBaseline="@id/textView_rpm"
+        android:layout_alignLeft="@id/textView_rpm"
         android:text="@string/unit_rpm"
         android:textAllCaps="true"
         android:textColor="@color/titleColor"
         android:textSize="15dp"
+        android:visibility="invisible"
         />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignRight="@+id/textView_speed"
+        android:layout_alignRight="@id/textView_speed"
         android:layout_alignTop="@id/textView_speed"
         android:layout_marginTop="15dp"
         android:text="@string/unit_speed"
@@ -158,6 +163,7 @@
         android:textColor="@color/titleColor"
         android:textSize="15dp"
         />
+
 
     <cz.lhoracek.android.dials.views.BarView
         android:id="@+id/barView_temp"
@@ -248,21 +254,21 @@
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_alignBottom="@id/barView_temp"
         android:src="@drawable/temperature16"
         android:tint="@color/colorPrimary"
         app:layout_heightPercent="8%"
         app:layout_marginLeftPercent="87%"
-        app:layout_marginTopPercent="37%"
         app:layout_widthPercent="5%"/>
 
     <ImageView
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_alignTop="@id/barView_fuel"
         android:src="@drawable/pump1"
         android:tint="@color/colorPrimary"
         app:layout_heightPercent="8%"
         app:layout_marginLeftPercent="87%"
-        app:layout_marginTopPercent="55%"
         app:layout_widthPercent="5%"/>
 
 </android.support.percent.PercentRelativeLayout>

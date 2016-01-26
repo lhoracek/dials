@@ -15,8 +15,8 @@ import java.text.DecimalFormat;
 public class DialView extends ValueView {
 
     private static final float WIDTH       = 0.2f;
-    private static final int   START_ANGLE = 180;
-    private static final int   SWEEP_ANGLE = 180;
+    private static final int   START_ANGLE = 150;
+    private static final int   SWEEP_ANGLE = 240;
 
     public DialView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -37,7 +37,7 @@ public class DialView extends ValueView {
         int yPos = (int) ((c.getHeight() / 2) - ((mPaint.descent() + mPaint.ascent()) / 2));
         //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
         mPaint.setTextAlign(Paint.Align.CENTER);
-        mPaint.setTextSize(getHeight() * WIDTH);
+        mPaint.setTextSize(getHeight() * WIDTH * 1.5f);
         DecimalFormat formatter = new DecimalFormat("#,###.0");
         c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
     }
