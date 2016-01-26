@@ -77,6 +77,10 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         textViewGear.setText("x");
         textViewRpm.setText("10200");
         textViewSpeed.setText("138");
+
+        dialViewVoltage.setValue(13.8f);
+        dialViewOilTemp.setValue(90);
+
     }
 
     protected void enableFullScreen(boolean enabled) {

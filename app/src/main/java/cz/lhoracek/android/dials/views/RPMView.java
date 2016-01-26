@@ -42,7 +42,6 @@ public class RPMView extends ValueView {
     public void onDraw(Canvas c) {
         mPaint.setColor(mColor);
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
-
         drawArcs(c, mPaint);
     }
 
@@ -51,6 +50,9 @@ public class RPMView extends ValueView {
         paint.setStrokeWidth(4);
         paint.setColor(mScaleColor);
         canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH)), START_ANGLE, SWEEP_ANGLE, false, paint);
+
+        // TODO paint dividers
+
         paint.setStyle(Paint.Style.FILL);
         int degreeRPM = (int) (mMaxValue / SWEEP_ANGLE);
         for (int i = 0; i < (SWEEP_ANGLE); i += STEP) {
@@ -59,8 +61,6 @@ public class RPMView extends ValueView {
     }
 
     private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor, int accentcolor) {
-
-
         paint.setColor(mainColor);
         Path path = new Path();
         path.arcTo(new RectF(mOvalWidth * WIDTH, mOvalWidth * WIDTH, mOvalWidth * (1 - WIDTH), mOvalHeight - (mOvalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
