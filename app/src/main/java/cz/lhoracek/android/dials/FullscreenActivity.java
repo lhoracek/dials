@@ -66,7 +66,7 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
 
 
         // TODO
-        rpmView.setValue(7000);
+        rpmView.setValue(8765);
         barViewFuel.setValue(60);
         barViewTemp.setValue(90);
 
@@ -75,7 +75,7 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         controlViewNeutral.setEnabled(true);
 
         textViewGear.setText("x");
-        textViewRpm.setText("10200");
+        textViewRpm.setText("8765");
         textViewSpeed.setText("138");
 
         dialViewVoltage.setValue(13.8f);
