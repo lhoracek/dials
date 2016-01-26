@@ -12,6 +12,7 @@
     <color name="scaleAccent">#7bc6e7</color>
     <color name="scaleOff">#1effffff</color>
     <color name="scaleOffAccent">#32ffffff</color>
+    <color name="scaleLine">#d4d4d4</color>
 
     <color name="titleColor">#8dffffff</color>
     <color name="numberColor">#03a9f4</color>

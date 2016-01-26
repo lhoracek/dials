@@ -20,6 +20,7 @@ public abstract class ValueView extends View {
     protected int mColorAccent    = Color.WHITE;
     protected int mColorOff       = Color.GRAY;
     protected int mColorOffAccent = Color.WHITE;
+    protected int mScaleColor     = Color.WHITE;
 
     public ValueView(Context context) {
         super(context);
@@ -45,13 +46,13 @@ public abstract class ValueView extends View {
         invalidate();
     }
 
-    private void readAttributes(Context ctx, AttributeSet attrs) {
+    protected void readAttributes(Context ctx, AttributeSet attrs) {
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.ValueView);
         mColor = a.getColor(R.styleable.ValueView_scaleColor, Color.WHITE);
         mColorAccent = a.getColor(R.styleable.ValueView_scaleColorAccent, Color.WHITE);
         mColorOff = a.getColor(R.styleable.ValueView_scaleOffColor, Color.BLACK);
         mColorOffAccent = a.getColor(R.styleable.ValueView_scaleOffColorAccent, Color.BLACK);
-
+        mScaleColor = a.getColor(R.styleable.ValueView_scaleLineColor, Color.WHITE);
 
         mMinValue = a.getFloat(R.styleable.ValueView_minValue, 0f);
         mMaxValue = a.getFloat(R.styleable.ValueView_maxValue, 0f);

@@ -7,7 +7,6 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
 
 import cz.lhoracek.android.dials.R;
@@ -60,6 +59,5 @@ public class ControlView extends View {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mIcon.setBounds((int) (getWidth() * 0.2f), (int) (getHeight() * 0.2f), (int) (getWidth() * 0.8f), (int) (getHeight() * 0.8f));
         mIcon.draw(c);
-        Log.d(getClass().getSimpleName(), "Drawing to " + getWidth() + "x" + getHeight() + " " + mIcon.toString());
     }
 }

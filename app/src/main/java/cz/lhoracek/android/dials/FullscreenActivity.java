@@ -41,6 +41,7 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
 
     @Bind(R.id.textView_speed) TextView textViewSpeed;
     @Bind(R.id.textView_gear)  TextView textViewGear;
+    @Bind(R.id.textView_rpm)  TextView textViewRpm;
 
     @Bind(R.id.control_highBeam) ControlView controlViewHighBeam;
     @Bind(R.id.control_lowBeam)  ControlView controlViewLowBeam;
@@ -72,6 +73,10 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         controlViewLowBeam.setEnabled(true);
         controlViewHighBeam.setEnabled(true);
         controlViewNeutral.setEnabled(true);
+
+        textViewGear.setText("x");
+        textViewRpm.setText("10200");
+        textViewSpeed.setText("138");
     }
 
     protected void enableFullScreen(boolean enabled) {
