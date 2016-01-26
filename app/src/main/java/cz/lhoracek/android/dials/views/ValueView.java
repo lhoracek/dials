@@ -44,6 +44,14 @@ public abstract class ValueView extends View {
         invalidate();
     }
 
+    public float getMinValue() {
+        return mMinValue;
+    }
+
+    public float getMaxValue() {
+        return mMaxValue;
+    }
+
     protected void readAttributes(Context ctx, AttributeSet attrs) {
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.ValueView);
         mColor = a.getColor(R.styleable.ValueView_scaleColor, Color.WHITE);

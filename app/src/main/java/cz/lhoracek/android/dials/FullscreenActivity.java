@@ -1,5 +1,6 @@
 package cz.lhoracek.android.dials;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import cz.lhoracek.android.dials.tools.TestTask;
 import cz.lhoracek.android.dials.views.BarView;
 import cz.lhoracek.android.dials.views.ControlView;
 import cz.lhoracek.android.dials.views.DialView;
@@ -41,7 +43,7 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
 
     @Bind(R.id.textView_speed) TextView textViewSpeed;
     @Bind(R.id.textView_gear)  TextView textViewGear;
-    @Bind(R.id.textView_rpm)  TextView textViewRpm;
+    @Bind(R.id.textView_rpm)   TextView textViewRpm;
 
     @Bind(R.id.control_highBeam) ControlView controlViewHighBeam;
     @Bind(R.id.control_lowBeam)  ControlView controlViewLowBeam;
@@ -64,7 +66,25 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         enableFullScreen(true);
         ButterKnife.bind(this);
 
+        if (savedInstanceState == null) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tests();
+                }
+            }, 1000);
+        }
+    }
 
+    private void tests() {
+        new TestTask(rpmView).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new TestTask(barViewFuel).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new TestTask(barViewTemp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new TestTask(dialViewOilTemp).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+        new TestTask(dialViewVoltage).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    }
+
+    private void onUpdate() {
         // TODO
         rpmView.setValue(8765);
         barViewFuel.setValue(60);
@@ -80,7 +100,6 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
 
         dialViewVoltage.setValue(13.8f);
         dialViewOilTemp.setValue(90);
-
     }
 
     protected void enableFullScreen(boolean enabled) {

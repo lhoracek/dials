@@ -7,6 +7,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+import java.text.DecimalFormat;
+
 /**
  * Created by lhoracek on 1/25/16.
  */
@@ -36,12 +38,13 @@ public class DialView extends ValueView {
         //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH);
-        c.drawText(Float.toString(mValue), xPos, yPos, mPaint);
+        DecimalFormat formatter = new DecimalFormat("#,###.0");
+        c.drawText(formatter.format(mValue), xPos, yPos, mPaint);
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {
         float range = mMaxValue - mMinValue;
-        float value = Math.max(0,mValue - mMinValue) / range;
+        float value = Math.max(0, mValue - mMinValue) / range;
 
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff);
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor);
