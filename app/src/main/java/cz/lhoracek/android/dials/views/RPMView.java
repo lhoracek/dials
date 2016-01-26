@@ -2,6 +2,7 @@ package cz.lhoracek.android.dials.views;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
@@ -62,12 +63,12 @@ public class RPMView extends ValueView {
 
             if (thousand % 4 == 0) {
                 Path path = new Path();
-                path.arcTo(new RectF(mOvalWidth * SCALE_WIDTH + 30, mOvalWidth * SCALE_WIDTH + 30, mOvalWidth * (1 - SCALE_WIDTH) - 30, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 30), START_ANGLE + degree + 1, 20);
+                path.arcTo(new RectF(mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * (1 - SCALE_WIDTH) - 33, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 33), START_ANGLE + degree + 1, 20);
                 path.close();
-                paint.setColor(mScaleColor);
+                Color.argb(128, Color.red(mScaleColor),Color.green(mScaleColor),Color.blue(mScaleColor));
+                paint.setColor(Color.GRAY);
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setTextSize(30);
-
                 canvas.drawTextOnPath(String.valueOf(thousand), path, 0, 0, paint);
             }
 
