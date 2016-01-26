@@ -13,7 +13,6 @@ import android.util.AttributeSet;
 public class RPMView extends ValueView {
 
     private static final float WIDTH          = 0.085f;
-    private static final float SMALLER_WIDTH  = 0.0f;
     private static final float SCALE_WIDTH    = 0.088f;
     private static final int   STRAIGHT_LINES = 9;
     private static final float STEP           = 2f;
@@ -56,11 +55,11 @@ public class RPMView extends ValueView {
         paint.setStyle(Paint.Style.FILL);
         int degreeRPM = (int) (mMaxValue / SWEEP_ANGLE);
         for (int i = 0; i < (SWEEP_ANGLE); i += STEP) {
-            drawArc(canvas, i + START_ANGLE, STEP - PAUSE, mPaint, (mValue > ((i + 1) * degreeRPM)) ? mColor : mColorOff, (mValue > ((i + 1) * degreeRPM)) ? mColorAccent : mColorOffAccent);
+            drawArc(canvas, i + START_ANGLE, STEP - PAUSE, mPaint, (mValue > ((i + 1) * degreeRPM)) ? mColor : mColorOff);
         }
     }
 
-    private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor, int accentcolor) {
+    private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor) {
         paint.setColor(mainColor);
         Path path = new Path();
         path.arcTo(new RectF(mOvalWidth * WIDTH, mOvalWidth * WIDTH, mOvalWidth * (1 - WIDTH), mOvalHeight - (mOvalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
@@ -68,15 +67,5 @@ public class RPMView extends ValueView {
         // innerCircle.
         path.close();
         canvas.drawPath(path, paint);
-
-        if (SMALLER_WIDTH > 0) {
-            paint.setColor(accentcolor);
-            Path path2 = new Path();
-            path2.arcTo(new RectF(mOvalWidth * SMALLER_WIDTH, mOvalWidth * SMALLER_WIDTH, mOvalWidth * (1 - SMALLER_WIDTH), mOvalHeight - (mOvalWidth * SMALLER_WIDTH)), startAngle, sweepDegrees);
-            path2.arcTo(new RectF(mOvalWidth * WIDTH, mOvalWidth * WIDTH, mOvalWidth * (1 - WIDTH), mOvalHeight - (mOvalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
-            // innerCircle.
-            path2.close();
-            canvas.drawPath(path2, paint);
-        }
     }
 }

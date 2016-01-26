@@ -23,10 +23,8 @@
         app:maxValue="13000"
         app:minValue="0"
         app:scaleColor="@color/scale"
-        app:scaleColorAccent="@color/scaleAccent"
         app:scaleLineColor="@color/scaleLine"
-        app:scaleOffColor="@color/scaleOff"
-        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+        app:scaleOffColor="@color/scaleOff"/>
 
 
     <cz.lhoracek.android.dials.views.DialView
@@ -40,9 +38,7 @@
         app:maxValue="15.6"
         app:minValue="12"
         app:scaleColor="@color/scale"
-        app:scaleColorAccent="@color/scaleAccent"
         app:scaleOffColor="@color/scaleOff"
-        app:scaleOffColorAccent="@color/scaleOffAccent"
         app:title="@string/title_voltage"
         />
 
@@ -57,9 +53,7 @@
         app:maxValue="150"
         app:minValue="0"
         app:scaleColor="@color/scale"
-        app:scaleColorAccent="@color/scaleAccent"
         app:scaleOffColor="@color/scaleOff"
-        app:scaleOffColorAccent="@color/scaleOffAccent"
         app:title="@string/title_oil_temp"
         />
 
@@ -177,9 +171,7 @@
         app:maxValue="120"
         app:minValue="60"
         app:scaleColor="@color/scale"
-        app:scaleColorAccent="@color/scaleAccent"
-        app:scaleOffColor="@color/scaleOff"
-        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+        app:scaleOffColor="@color/scaleOff"/>
 
     <cz.lhoracek.android.dials.views.BarView
         android:id="@+id/barView_fuel"
@@ -192,9 +184,7 @@
         app:maxValue="100"
         app:minValue="0"
         app:scaleColor="@color/scale"
-        app:scaleColorAccent="@color/scaleAccent"
-        app:scaleOffColor="@color/scaleOff"
-        app:scaleOffColorAccent="@color/scaleOffAccent"/>
+        app:scaleOffColor="@color/scaleOff"/>
 
     <cz.lhoracek.android.dials.views.ControlView
         android:id="@+id/control_lowBeam"

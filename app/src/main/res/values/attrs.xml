@@ -5,9 +5,7 @@
 
     <declare-styleable name="ValueView">
         <attr name="scaleColor" format="color"/>
-        <attr name="scaleColorAccent" format="color"/>
         <attr name="scaleOffColor" format="color"/>
-        <attr name="scaleOffColorAccent" format="color"/>
         <attr name="scaleLineColor" format="color"/>
         <attr name="caption" format="string"/>
         <attr name="maxValue" format="float"/>

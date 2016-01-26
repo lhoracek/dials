@@ -43,11 +43,11 @@ public class DialView extends ValueView {
         float range = mMaxValue - mMinValue;
         float value = Math.max(0,mValue - mMinValue) / range;
 
-        drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff, mColorOffAccent);
-        drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor, mColorAccent);
+        drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff);
+        drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor);
     }
 
-    private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor, int accentcolor) {
+    private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor) {
         int ovalWidth = getWidth();
         int ovalHeight = getHeight();
 
@@ -58,14 +58,5 @@ public class DialView extends ValueView {
         // innerCircle.
         path.close();
         canvas.drawPath(path, paint);
-
-        paint.setColor(accentcolor);
-        Path path2 = new Path();
-        path2.arcTo(new RectF(ovalWidth * (WIDTH + 5 * (WIDTH * WIDTH)), ovalWidth * (WIDTH + 5 * (WIDTH * WIDTH)), ovalWidth * (1 - (WIDTH + 5 * (WIDTH * WIDTH))), ovalHeight - (ovalWidth * (WIDTH + 5 * (WIDTH * WIDTH)))), startAngle, sweepDegrees);
-        path2.arcTo(new RectF(ovalWidth * WIDTH, ovalWidth * WIDTH, ovalWidth * (1 - WIDTH), ovalHeight - (ovalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
-
-        // innerCircle.
-        path2.close();
-        //canvas.drawPath(path2, paint);
     }
 }
