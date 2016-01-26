@@ -1,8 +1,8 @@
 <resources>
-    <string name="app_name">Dials</string>
+    <string name="app_name">Gauges</string>
 
 
-    <string name="title_activity_fullscreen">FullscreenActivity</string>
+    <string name="title_activity_fullscreen">Gauges</string>
 
     <string name="title_voltage">Voltage</string>
     <string name="title_oil_temp">Oil</string>
