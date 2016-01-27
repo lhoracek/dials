@@ -83,6 +83,20 @@
         />
 
     <cz.lhoracek.android.dials.views.TextViewPlus
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:singleLine="true"
+        android:text="8"
+        android:textColor="@color/scaleOff"
+        android:textSize="120dp"
+        app:customFont="digital.ttf"
+        app:layout_marginLeftPercent="0%"
+        app:layout_marginTopPercent="2%"
+        app:layout_widthPercent="15%"
+        />
+
+    <cz.lhoracek.android.dials.views.TextViewPlus
         android:id="@+id/textView_gear"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -106,6 +120,20 @@
         android:textSize="15dp"
         app:layout_marginLeftPercent="3%"
         app:layout_marginTopPercent="30%"
+        />
+
+    <cz.lhoracek.android.dials.views.TextViewPlus
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:singleLine="true"
+        android:text="888"
+        android:textColor="@color/scaleOff"
+        android:textSize="200dp"
+        app:customFont="digital.ttf"
+        app:layout_marginLeftPercent="30%"
+        app:layout_marginTopPercent="30%"
+        app:layout_widthPercent="50%"
         />
 
     <cz.lhoracek.android.dials.views.TextViewPlus
