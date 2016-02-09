@@ -19,6 +19,10 @@ public abstract class ValueView extends View {
     protected int mColor          = Color.WHITE;
     protected int mColorOff       = Color.GRAY;
     protected int mScaleColor     = Color.WHITE;
+    protected int mWarningColor     = Color.TRANSPARENT;
+
+    protected int mWarningMaxValue = Integer.MAX_VALUE;
+    protected int mWarningMinValue = Integer.MIN_VALUE;
 
     public ValueView(Context context) {
         super(context);
@@ -52,11 +56,28 @@ public abstract class ValueView extends View {
         return mMaxValue;
     }
 
+    public int getWarningMaxValue() {
+        return mWarningMaxValue;
+    }
+
+    public void setWarningMaxValue(int mWarningMaxValue) {
+        this.mWarningMaxValue = mWarningMaxValue;
+    }
+
+    public int getWarningMinValue() {
+        return mWarningMinValue;
+    }
+
+    public void setWarningMinValue(int mWarningMinValue) {
+        this.mWarningMinValue = mWarningMinValue;
+    }
+
     protected void readAttributes(Context ctx, AttributeSet attrs) {
         TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.ValueView);
         mColor = a.getColor(R.styleable.ValueView_scaleColor, Color.WHITE);
         mColorOff = a.getColor(R.styleable.ValueView_scaleOffColor, Color.BLACK);
         mScaleColor = a.getColor(R.styleable.ValueView_scaleLineColor, Color.WHITE);
+        mWarningColor = a.getColor(R.styleable.ValueView_warningColor, Color.TRANSPARENT);
 
         mMinValue = a.getFloat(R.styleable.ValueView_minValue, 0f);
         mMaxValue = a.getFloat(R.styleable.ValueView_maxValue, 0f);
