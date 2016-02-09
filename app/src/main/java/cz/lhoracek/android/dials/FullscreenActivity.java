@@ -4,6 +4,8 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,7 +23,7 @@ import cz.lhoracek.android.dials.views.RPMView;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class FullscreenActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener, View.OnClickListener {
+public class FullscreenActivity extends AppCompatActivity implements View.OnSystemUiVisibilityChangeListener, View.OnTouchListener {
 
     private View mDecorView;
     private View mMainView;
@@ -71,10 +73,15 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         mDecorView = getWindow().getDecorView();
 
         mMainView = findViewById(R.id.layout_main);
-        mMainView.setClickable(true);
-
         mDecorView.setOnSystemUiVisibilityChangeListener(this);
-        mMainView.setOnClickListener(this);
+        mMainView.setOnTouchListener(this);
+        mMainView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                Log.d("TAG", "Long click biatch!");
+                return false;
+            }
+        });
 
         enableFullScreen(true);
         ButterKnife.bind(this);
@@ -82,6 +89,8 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         if (savedInstanceState == null) {
             tests();
         }
+
+        rpmView.setWarningMaxValue(10000);
     }
 
     private void tests() {
@@ -110,7 +119,7 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         int newVisibility = View.SYSTEM_UI_FLAG_LAYOUT_STABLE | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN;
 
         if (enabled) {
-            newVisibility |= View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+            newVisibility |= View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_IMMERSIVE;
         }
 
         // Want to hide again after 3s
@@ -130,9 +139,11 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
     }
 
     @Override
-    public void onClick(View v) {
+    public boolean onTouch(View v, MotionEvent event) {
         // If the `mainView` receives a click event then reset the leanback-mode clock
+        Log.d("TAG", "Touch biatch!");
         resetHideTimer();
+        return true;
     }
 
     @Override

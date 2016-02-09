@@ -13,15 +13,15 @@ import android.util.AttributeSet;
  */
 public class RPMView extends ValueView {
 
-    private static final float WIDTH          = 0.085f;
-    private static final float SCALE_WIDTH    = 0.088f;
-    private static final int   STRAIGHT_LINES = 9;
-    private static final float STEP           = 2f;
-    private static final float PAUSE          = 0.5f;
-    private static final int   START_ANGLE    = 195;
-    private static final int   SWEEP_ANGLE    = 90;
-    private              int   mOvalWidth     = 0;
-    private              int   mOvalHeight    = 0;
+    private static final float WIDTH = 0.085f;
+    private static final float SCALE_WIDTH = 0.088f;
+    private static final float STEP = 3f;
+    private static final float PAUSE = 0.5f;
+    private static final int START_ANGLE = 195;
+    private static final int SWEEP_ANGLE = 90;
+    private int mOvalWidth = 0;
+    private int mOvalHeight = 0;
+
 
     public RPMView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -51,7 +51,8 @@ public class RPMView extends ValueView {
         paint.setColor(mScaleColor);
         canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH)), START_ANGLE, SWEEP_ANGLE - PAUSE, false, paint);
 
-        int stepThousand = 2;
+        int stepThousand = mMaxValue > 6000 ? 2 : 1;
+        int numberThousand = stepThousand * 2;
         float partDegrees = SWEEP_ANGLE / ((mMaxValue - mMinValue) / (stepThousand * 1000));
         float degree = 0;
         int thousand = 0;
@@ -65,7 +66,7 @@ public class RPMView extends ValueView {
                 Path path = new Path();
                 path.arcTo(new RectF(mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * (1 - SCALE_WIDTH) - 33, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 33), START_ANGLE + degree + 1, 20);
                 path.close();
-                Color.argb(128, Color.red(mScaleColor),Color.green(mScaleColor),Color.blue(mScaleColor));
+                Color.argb(128, Color.red(mScaleColor), Color.green(mScaleColor), Color.blue(mScaleColor));
                 paint.setColor(Color.GRAY);
                 paint.setTextAlign(Paint.Align.LEFT);
                 paint.setTextSize(30);
@@ -79,7 +80,7 @@ public class RPMView extends ValueView {
         paint.setStyle(Paint.Style.FILL);
         int degreeRPM = (int) (mMaxValue / SWEEP_ANGLE);
         for (int i = 0; i < (SWEEP_ANGLE); i += STEP) {
-            drawArc(canvas, i + START_ANGLE, STEP - PAUSE, mPaint, (mValue > ((i + 1) * degreeRPM)) ? mColor : mColorOff);
+            drawArc(canvas, i + START_ANGLE, STEP - PAUSE, mPaint, (mValue > ((i + 1) * degreeRPM)) ? ((((i + 1) * degreeRPM) > mWarningMaxValue) ? mWarningColor :mColor) : mColorOff);
         }
     }
 
