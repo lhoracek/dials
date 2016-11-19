@@ -18,12 +18,20 @@ import android.util.Log;
 
 import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
 import com.github.ivbaranov.rxbluetooth.RxBluetooth;
+import com.google.gson.Gson;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.util.Set;
 import java.util.UUID;
 
+import javax.inject.Inject;
+
+import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.MainActivity;
 import cz.lhoracek.android.dials.R;
+import cz.lhoracek.android.dials.events.DataUpdateEvent;
+import cz.lhoracek.android.dials.model.Values;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -34,10 +42,15 @@ import rx.schedulers.Schedulers;
 public class BluetoothService extends Service {
     public static final String STOP_BROADCAST = "services_stop_service";
 
+    private final IBinder myBinder = new BluetoothBinder();
+    private       boolean running  = false;
 
-    private final IBinder          myBinder          = new BluetoothBinder();
-    private       boolean          running           = false;
-    private       BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    @Inject Gson             mGson;
+    @Inject BluetoothAdapter mBluetoothAdapter;
+
+    public BluetoothService() {
+        App.component().inject(this);
+    }
 
     public class BluetoothBinder extends Binder {
         public BluetoothService getService() {
@@ -158,7 +171,6 @@ public class BluetoothService extends Service {
                                     try {
                                         BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
 
-
                                         // observe strings received
                                         bluetoothConnection.observeStringStream()
                                                 .observeOn(AndroidSchedulers.mainThread())
@@ -166,10 +178,12 @@ public class BluetoothService extends Service {
                                                 .subscribe(new Action1<String>() {
                                                     @Override
                                                     public void call(String string) {
-                                                        Log.d(this.toString(), "Received " + string);
-                                                            // TODO parse JSON
-                                                        //    EventBus.getDefault().post(new DataUpdateEvent(Integer.parseInt(string)));
-                                                        // This will be called every string received
+                                                        try {
+                                                            Values values = mGson.fromJson(string, Values.class);
+                                                            EventBus.getDefault().post(new DataUpdateEvent(values));
+                                                        }catch (Exception e){
+                                                            Log.e(this.toString(), "Error receiving " + string, e);
+                                                        }
                                                     }
                                                 }, new Action1<Throwable>() {
                                                     @Override
@@ -177,7 +191,8 @@ public class BluetoothService extends Service {
                                                         Log.e(this.toString(), "Error receiving");
                                                         throwable.printStackTrace();
                                                         // Error occured
-                                                        startBluetooth();
+                                                        // TODO
+                                                       startBluetooth();
                                                     }
                                                 });
                                     } catch (Exception e) {
@@ -192,6 +207,7 @@ public class BluetoothService extends Service {
 
                                     Log.e(this.toString(), "Error socket");
                                     throwable.printStackTrace();
+                                    // TODO
                                     startBluetooth();
                                 }
                             });

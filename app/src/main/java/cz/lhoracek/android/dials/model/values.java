@@ -15,6 +15,7 @@ public abstract class Values {
     }
 
     public abstract Integer getGear();
+    public abstract Integer getOdo();
     public abstract Integer getRevs();
     public abstract Float   getVoltage();
     public abstract Float   getOilTemp();

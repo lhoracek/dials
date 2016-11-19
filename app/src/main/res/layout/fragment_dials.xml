@@ -30,7 +30,7 @@
                                                  app:scaleColor="@color/scale"
                                                  app:scaleLineColor="@color/scaleLine"
                                                  app:scaleOffColor="@color/scaleOff"
-                                                 app:value="@{viewModel.revs}"
+                                                 app:value="@{viewModel.values.revs ?? 0}"
                                                  app:warningMax="@{10000}"
                                                  app:warningColor="@color/controlRed"/>
 
@@ -43,7 +43,7 @@
                                                   app:layout_widthPercent="15%"
                                                   app:maxValue="15.6"
                                                   app:minValue="12"
-                                                  app:value="@{viewModel.voltage}"
+                                                  app:value="@{viewModel.values.voltage ?? .0f}"
                                                   app:scaleColor="@color/scale"
                                                   app:scaleOffColor="@color/scaleOff"
                                                   app:title="@string/title_voltage"/>
@@ -52,7 +52,7 @@
                                                   android:layout_width="0dp"
                                                   android:layout_height="0dp"
                                                   app:layout_heightPercent="25%"
-                                                  app:value="@{viewModel.oilTemp}"
+                                                  app:value="@{viewModel.values.oilTemp ?? .0f}"
                                                   app:layout_marginLeftPercent="20%"
                                                   app:layout_marginTopPercent="80%"
                                                   app:layout_widthPercent="15%"
@@ -101,7 +101,7 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="center"
                                                       android:maxLines="1"
-                                                      android:text="@{String.valueOf(viewModel.gear)}"
+                                                      android:text="@{viewModel.values.gear != null &amp;&amp; viewModel.values.gear > 0 ? String.valueOf(viewModel.values.gear) : null}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="120dp"
                                                       app:customFont="digital.ttf"
@@ -135,7 +135,7 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="right"
                                                       android:maxLines="1"
-                                                      android:text="@{String.valueOf(viewModel.speed)}"
+                                                      android:text="@{viewModel.values.speed != null ? String.valueOf(viewModel.values.speed) : null}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="200dp"
                                                       app:customFont="digital.ttf"
@@ -143,16 +143,32 @@
                                                       app:layout_marginTopPercent="30%"
                                                       app:layout_widthPercent="50%"/>
 
+
+        <cz.lhoracek.android.dials.views.TextViewPlus
+                                                      android:layout_width="0dp"
+                                                      android:layout_height="wrap_content"
+                                                      android:layout_alignBaseline="@id/textView_speed"
+                                                      android:gravity="right"
+                                                      android:maxLines="1"
+                                                      android:text="88888"
+                                                      android:textColor="@color/scaleOff"
+                                                      android:textSize="40dp"
+                                                      app:customFont="digital.ttf"
+                                                      app:layout_marginLeftPercent="8%"
+                                                      app:layout_marginRightPercent="10%"
+                                                      app:layout_marginTopPercent="10%"
+                                                      app:layout_widthPercent="25%"/>
+
         <cz.lhoracek.android.dials.views.TextViewPlus android:id="@+id/textView_rpm"
                                                       android:layout_width="0dp"
                                                       android:layout_height="wrap_content"
                                                       android:layout_alignBaseline="@id/textView_speed"
                                                       android:gravity="right"
                                                       android:maxLines="1"
-                                                      android:text="@{String.valueOf(viewModel.revs)}"
+                                                      android:text="@{viewModel.values.odo != null ? String.valueOf(viewModel.values.odo) : null}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="40dp"
-                                                      android:visibility="invisible"
+                                                      android:visibility="visible"
                                                       app:customFont="digital.ttf"
                                                       app:layout_marginLeftPercent="8%"
                                                       app:layout_marginTopPercent="10%"
@@ -188,7 +204,7 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="120"
                                                  app:minValue="60"
-                                                 app:value="@{viewModel.temp}"
+                                                 app:value="@{viewModel.values.temp ?? .0f}"
                                                  app:scaleColor="@color/scale"
                                                  app:scaleOffColor="@color/scaleOff"/>
 
@@ -201,7 +217,7 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="100"
                                                  app:minValue="0"
-                                                 app:value="@{viewModel.fuel}"
+                                                 app:value="@{viewModel.values.fuel ?? .0f}"
                                                  app:scaleColor="@color/scale"
                                                  app:scaleOffColor="@color/scaleOff"/>
 
@@ -213,7 +229,7 @@
                                                      app:layout_marginLeftPercent="64%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.lowBeam}"
+                                                     app:enabled="@{viewModel.values.lowBeam ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -225,7 +241,7 @@
                                                      app:layout_marginLeftPercent="72%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.highBeam}"
+                                                     app:enabled="@{viewModel.values.highBeam ?? false}"
                                                      app:scaleColor="@color/controlBlue"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -237,7 +253,7 @@
                                                      app:layout_marginLeftPercent="56%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.engine}"
+                                                     app:enabled="@{viewModel.values.engine ?? false}"
                                                      app:scaleColor="@color/controlRed"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -249,7 +265,7 @@
                                                      app:layout_marginLeftPercent="48%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.neutral}"
+                                                     app:enabled="@{viewModel.values.neutral ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -261,7 +277,7 @@
                                                      app:layout_marginLeftPercent="40%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.turnlight}"
+                                                     app:enabled="@{viewModel.values.turnlight ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 

@@ -1,17 +1,19 @@
 package cz.lhoracek.android.dials.events;
 
+import cz.lhoracek.android.dials.model.Values;
+
 /**
  * Created by horaclu2 on 19/11/16.
  */
 
 public class DataUpdateEvent {
-    private Integer revs;
+    private final Values mValues;
 
-    public DataUpdateEvent(Integer revs) {
-        this.revs = revs;
+    public DataUpdateEvent(Values values) {
+        mValues = values;
     }
 
-    public Integer getRevs() {
-        return revs;
+    public Values getValues() {
+        return mValues;
     }
 }
