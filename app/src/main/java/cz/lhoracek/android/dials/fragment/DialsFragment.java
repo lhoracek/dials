@@ -17,7 +17,6 @@ public class DialsFragment extends Fragment {
 
     FragmentDialsBinding mBinding;
 
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -31,7 +30,7 @@ public class DialsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState == null) {
-            tests();
+            //tests();
         }
     }
 
@@ -41,8 +40,8 @@ public class DialsFragment extends Fragment {
 
     private void onUpdate() {
         // TODO
-       // rpmView.setWarningMaxValue(10000);
 
+        // rpmView.setWarningMaxValue(10000);
         mBinding.getModel().setRevs(8756);
         mBinding.getModel().setSpeed(123);
         mBinding.getModel().setGear(5);
