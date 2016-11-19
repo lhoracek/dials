@@ -7,7 +7,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import cz.lhoracek.android.dials.databinding.FragmentDialsBinding;
+import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import cz.lhoracek.android.dials.model.DialsModel;
 
 /**
@@ -33,6 +38,24 @@ public class DialsFragment extends Fragment {
         if (savedInstanceState == null) {
             tests();
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(DataUpdateEvent event) {
+        viewModel.setRevs(event.getRevs());
+       // mBinding.rpmViewRevsGraph.setValue(event.getRevs());
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onPause() {
+        EventBus.getDefault().unregister(this);
+        super.onPause();
     }
 
     private void tests() {

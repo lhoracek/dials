@@ -47,10 +47,9 @@ public class MainActivity extends AppCompatActivity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
         mDecorView = getWindow().getDecorView();
-
         mMainView = findViewById(R.id.drawer_layout);
-
         enableFullScreen(true);
+        startService(new Intent(this, BluetoothService.class));
     }
 
     @Override

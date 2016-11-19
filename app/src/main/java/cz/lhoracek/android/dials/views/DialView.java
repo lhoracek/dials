@@ -9,6 +9,8 @@ import android.util.AttributeSet;
 
 import java.text.DecimalFormat;
 
+import static android.R.attr.path;
+
 /**
  * Created by lhoracek on 1/25/16.
  */
@@ -26,6 +28,9 @@ public class DialView extends ValueView {
         super(ctx);
     }
 
+    DecimalFormat formatter = new DecimalFormat("#,###.0");
+    RectF mRectF = new RectF();
+    Path mPath = new Path();
 
     @Override
     public void onDraw(Canvas c) {
@@ -38,7 +43,7 @@ public class DialView extends ValueView {
         //((textPaint.descent() + textPaint.ascent()) / 2) is the distance from the baseline to the center.
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH * 1.5f);
-        DecimalFormat formatter = new DecimalFormat("#,###.0");
+
         c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
     }
 
@@ -55,11 +60,14 @@ public class DialView extends ValueView {
         int ovalHeight = getHeight();
 
         paint.setColor(mainColor);
-        Path path = new Path();
-        path.arcTo(new RectF(ovalWidth * WIDTH, ovalHeight * WIDTH, ovalWidth - (ovalWidth * WIDTH), ovalHeight - (ovalHeight * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
-        path.arcTo(new RectF(0, 0, ovalWidth, ovalHeight), startAngle, sweepDegrees);
+
+        mPath.reset();
+        mRectF.set(ovalWidth * WIDTH, ovalHeight * WIDTH, ovalWidth - (ovalWidth * WIDTH), ovalHeight - (ovalHeight * WIDTH));
+        mPath.arcTo(mRectF, startAngle + sweepDegrees, -sweepDegrees);
+        mRectF.set(0, 0, ovalWidth, ovalHeight);
+        mPath.arcTo(mRectF, startAngle, sweepDegrees);
         // innerCircle.
-        path.close();
+        mPath.close();
         canvas.drawPath(path, paint);
     }
 }

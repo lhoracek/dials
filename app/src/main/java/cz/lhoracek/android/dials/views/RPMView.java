@@ -22,6 +22,8 @@ public class RPMView extends ValueView {
     private int mOvalWidth = 0;
     private int mOvalHeight = 0;
 
+    Path path = new Path();
+    RectF mRectF = new RectF();
 
     public RPMView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -49,7 +51,8 @@ public class RPMView extends ValueView {
         paint.setStyle(Paint.Style.STROKE);
         paint.setStrokeWidth(4);
         paint.setColor(mScaleColor);
-        canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH)), START_ANGLE, SWEEP_ANGLE - PAUSE, false, paint);
+        mRectF.set(mOvalWidth * SCALE_WIDTH, mOvalWidth * SCALE_WIDTH, mOvalWidth * (1 - SCALE_WIDTH), mOvalHeight - (mOvalWidth * SCALE_WIDTH));
+        canvas.drawArc(mRectF, START_ANGLE, SWEEP_ANGLE - PAUSE, false, paint);
 
         int stepThousand = mMaxValue > 6000 ? 2 : 1;
         int numberThousand = stepThousand * 2;
@@ -59,12 +62,14 @@ public class RPMView extends ValueView {
         while (degree <= SWEEP_ANGLE) {
             for (int i = 0; i < 10; i += 3) {
                 paint.setColor(mScaleColor);
-                canvas.drawArc(new RectF(mOvalWidth * SCALE_WIDTH + i, mOvalWidth * SCALE_WIDTH + i, mOvalWidth * (1 - SCALE_WIDTH) - i, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - i), START_ANGLE + degree, 0.5f, false, paint);
+                mRectF.set(mOvalWidth * SCALE_WIDTH + i, mOvalWidth * SCALE_WIDTH + i, mOvalWidth * (1 - SCALE_WIDTH) - i, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - i);
+                canvas.drawArc(mRectF, START_ANGLE + degree, 0.5f, false, paint);
             }
 
             if (thousand % 4 == 0) {
-                Path path = new Path();
-                path.arcTo(new RectF(mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * (1 - SCALE_WIDTH) - 33, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 33), START_ANGLE + degree + 1, 20);
+                path.reset();
+                mRectF.set(mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * (1 - SCALE_WIDTH) - 33, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 33);
+                path.arcTo(mRectF, START_ANGLE + degree + 1, 20);
                 path.close();
                 Color.argb(128, Color.red(mScaleColor), Color.green(mScaleColor), Color.blue(mScaleColor));
                 paint.setColor(Color.GRAY);
@@ -86,9 +91,11 @@ public class RPMView extends ValueView {
 
     private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor) {
         paint.setColor(mainColor);
-        Path path = new Path();
-        path.arcTo(new RectF(mOvalWidth * WIDTH, mOvalWidth * WIDTH, mOvalWidth * (1 - WIDTH), mOvalHeight - (mOvalWidth * WIDTH)), startAngle + sweepDegrees, -sweepDegrees);
-        path.arcTo(new RectF(0, 0, mOvalWidth, mOvalHeight), startAngle, sweepDegrees);
+        path.reset();
+        mRectF.set(mOvalWidth * WIDTH, mOvalWidth * WIDTH, mOvalWidth * (1 - WIDTH), mOvalHeight - (mOvalWidth * WIDTH));
+        path.arcTo(mRectF, startAngle + sweepDegrees, -sweepDegrees);
+        mRectF.set(0, 0, mOvalWidth, mOvalHeight);
+        path.arcTo(mRectF, startAngle, sweepDegrees);
         // innerCircle.
         path.close();
         canvas.drawPath(path, paint);

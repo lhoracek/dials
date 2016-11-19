@@ -6,6 +6,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +14,23 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
+import com.github.ivbaranov.rxbluetooth.RxBluetooth;
+
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Set;
+import java.util.UUID;
 
 import cz.lhoracek.android.dials.MainActivity;
 import cz.lhoracek.android.dials.R;
+import cz.lhoracek.android.dials.events.DataUpdateEvent;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.functions.Action1;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by horaclu2 on 09/02/16.
@@ -127,17 +139,60 @@ public class BluetoothService extends Service {
 
     public void startBluetooth() {
         Log.d(this.toString(), "starting bluetooth");
-        // TODO
-
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-// If there are paired devices
         if (pairedDevices.size() > 0) {
             // Loop through paired devices
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 Log.d(this.toString(), "BT Device: " + device.getName());
                 // TODO find mine
+                if (device.getName().equals("HC-06")) {
+                    UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+                    RxBluetooth rxBluetooth = new RxBluetooth(this);
+                    rxBluetooth.observeConnectDevice(device, uuid)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeOn(Schedulers.io())
+                            .subscribe(new Action1<BluetoothSocket>() {
+                                @Override
+                                public void call(BluetoothSocket socket) {
+                                    // Connected to the device, do anything with the socket
+                                    Log.d(this.toString(), "Connected to device");
+
+                                    try {
+                                        BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
+
+
+                                        // observe strings received
+                                        bluetoothConnection.observeStringStream()
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(new Action1<String>() {
+                                                    @Override
+                                                    public void call(String string) {
+                                                        if(!TextUtils.isEmpty(string)) {
+                                                            // TODO parse JSON
+                                                            EventBus.getDefault().post(new DataUpdateEvent(Integer.parseInt(string)));
+                                                        }
+                                                        // This will be called every string received
+                                                    }
+                                                }, new Action1<Throwable>() {
+                                                    @Override
+                                                    public void call(Throwable throwable) {
+                                                        // Error occured
+                                                    }
+                                                });
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }, new Action1<Throwable>() {
+                                @Override
+                                public void call(Throwable throwable) {
+                                    // Error occured
+                                }
+                            });
+                }
             }
         }
     }
@@ -159,7 +214,7 @@ public class BluetoothService extends Service {
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Intent        stopIntent        = new Intent(STOP_BROADCAST);
+        Intent stopIntent = new Intent(STOP_BROADCAST);
         PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, 1, stopIntent, PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new Notification.Builder(this)
                 .setContentIntent(launchPendingIntent)

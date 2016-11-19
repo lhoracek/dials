@@ -61,4 +61,7 @@ dependencies {
     apt "com.google.auto.value:auto-value:$autoValueVersion"
     apt "com.ryanharter.auto.value:auto-value-parcel:$auto_value_parcel"
     apt "com.ryanharter.auto.value:auto-value-gson:$auto_value_gson"
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+    compile 'com.github.ivbaranov:rxbluetooth:0.1.2'
 }
