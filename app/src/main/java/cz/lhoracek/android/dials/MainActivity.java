@@ -48,7 +48,6 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_fullscreen);
         mDecorView = getWindow().getDecorView();
         mMainView = findViewById(R.id.drawer_layout);
-        enableFullScreen(true);
         startService(new Intent(this, BluetoothService.class));
     }
 
@@ -57,6 +56,7 @@ public class MainActivity extends AppCompatActivity  {
         super.onResume();
         bindService(new Intent(this, BluetoothService.class), myConnection, Context.BIND_AUTO_CREATE);
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter(UPDATE_BROADCAST));
+        enableFullScreen(true);
     }
 
     @Override
