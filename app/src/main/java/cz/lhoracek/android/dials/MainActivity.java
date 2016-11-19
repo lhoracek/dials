@@ -7,9 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.content.pm.FeatureInfo;
-import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -18,18 +15,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.TextView;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
 import cz.lhoracek.android.dials.service.BluetoothService;
-import cz.lhoracek.android.dials.tools.ControlTestTask;
-import cz.lhoracek.android.dials.tools.DigitTestTask;
-import cz.lhoracek.android.dials.tools.GraphTestTask;
-import cz.lhoracek.android.dials.views.BarView;
-import cz.lhoracek.android.dials.views.ControlView;
-import cz.lhoracek.android.dials.views.DialView;
-import cz.lhoracek.android.dials.views.RPMView;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -68,7 +55,6 @@ public class MainActivity extends AppCompatActivity implements View.OnSystemUiVi
         mMainView.setOnTouchListener(this);
 
         enableFullScreen(true);
-        ButterKnife.bind(this);
     }
 
     @Override
