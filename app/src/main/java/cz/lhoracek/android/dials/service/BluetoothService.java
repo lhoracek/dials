@@ -19,14 +19,11 @@ import android.util.Log;
 import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
 import com.github.ivbaranov.rxbluetooth.RxBluetooth;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.util.Set;
 import java.util.UUID;
 
 import cz.lhoracek.android.dials.MainActivity;
 import cz.lhoracek.android.dials.R;
-import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action1;
 import rx.schedulers.Schedulers;
@@ -157,7 +154,7 @@ public class BluetoothService extends Service {
                                 public void call(BluetoothSocket socket) {
                                     // Connected to the device, do anything with the socket
                                     Log.d(this.toString(), "Connected to device");
-                                    
+
                                     try {
                                         BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
 
@@ -169,9 +166,9 @@ public class BluetoothService extends Service {
                                                 .subscribe(new Action1<String>() {
                                                     @Override
                                                     public void call(String string) {
-                                                        //Log.d(this.toString(), "Received " + string);
+                                                        Log.d(this.toString(), "Received " + string);
                                                             // TODO parse JSON
-                                                            EventBus.getDefault().post(new DataUpdateEvent(Integer.parseInt(string)));
+                                                        //    EventBus.getDefault().post(new DataUpdateEvent(Integer.parseInt(string)));
                                                         // This will be called every string received
                                                     }
                                                 }, new Action1<Throwable>() {
