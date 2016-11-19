@@ -15,13 +15,14 @@ import cz.lhoracek.android.dials.model.DialsModel;
  */
 public class DialsFragment extends Fragment {
 
-    FragmentDialsBinding mBinding;
+    private FragmentDialsBinding mBinding;
+    private DialsModel           viewModel;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mBinding = FragmentDialsBinding.inflate(inflater);
-        mBinding.setModel(new DialsModel());
+        mBinding.setViewModel(viewModel = new DialsModel());
         return mBinding.getRoot();
     }
 
@@ -30,7 +31,7 @@ public class DialsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
         if (savedInstanceState == null) {
-            //tests();
+            tests();
         }
     }
 
@@ -42,20 +43,20 @@ public class DialsFragment extends Fragment {
         // TODO
 
         // rpmView.setWarningMaxValue(10000);
-        mBinding.getModel().setRevs(8756);
-        mBinding.getModel().setSpeed(123);
-        mBinding.getModel().setGear(5);
-        mBinding.getModel().setVoltage(13.5f);
-        mBinding.getModel().setOilTemp(90.5f);
+        viewModel.setRevs(8756);
+        viewModel.setSpeed(123);
+        viewModel.setGear(5);
+        viewModel.setVoltage(13.5f);
+        viewModel.setOilTemp(90.5f);
 
-        mBinding.getModel().setTurnlight(true);
-        mBinding.getModel().setNeutral(true);
-        mBinding.getModel().setEngine(true);
-        mBinding.getModel().setLowBeam(true);
-        mBinding.getModel().setHighBeam(true);
+        viewModel.setTurnlight(true);
+        viewModel.setNeutral(true);
+        viewModel.setEngine(true);
+        viewModel.setLowBeam(true);
+        viewModel.setHighBeam(true);
 
-        mBinding.getModel().setTemp(90.5f);
-        mBinding.getModel().setFuel(0.5f);
+        viewModel.setTemp(90.5f);
+        viewModel.setFuel(50f);
     }
 
 }

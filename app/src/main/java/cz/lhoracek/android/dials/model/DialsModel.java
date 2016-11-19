@@ -9,10 +9,10 @@ import android.databinding.BaseObservable;
 public class DialsModel extends BaseObservable {
     private Integer gear;
     private Integer revs;
-    private Float voltage;
-    private Float oittemp;
-    private Float fuel;
-    private Float temp;
+    private Float   voltage;
+    private Float   oilTemp;
+    private Float   fuel;
+    private Float   temp;
     private Integer speed;
     private Boolean turnlight;
     private Boolean neutral;
@@ -74,12 +74,12 @@ public class DialsModel extends BaseObservable {
         notifyChange();
     }
 
-    public Float getOittemp() {
-        return oittemp;
+    public Float getOilTemp() {
+        return oilTemp;
     }
 
     public void setOilTemp(Float oittemp) {
-        this.oittemp = oittemp;
+        this.oilTemp = oittemp;
         notifyChange();
     }
 

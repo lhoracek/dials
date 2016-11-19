@@ -1,7 +1,8 @@
 <layout>
 
     <data>
-        <variable name="model" type="cz.lhoracek.android.dials.model.DialsModel"/>
+        <variable name="viewModel" type="cz.lhoracek.android.dials.model.DialsModel"/>
+       <import type="java.lang.String" />
     </data>
 
     <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -11,7 +12,6 @@
                                                    android:layout_height="match_parent"
                                                    android:background="@color/black"
                                                    android:keepScreenOn="true"
-                                                   android:fitsSystemWindows="false"
                                                    tools:context=".MainActivity">
 
 
@@ -30,6 +30,7 @@
                                                  app:scaleColor="@color/scale"
                                                  app:scaleLineColor="@color/scaleLine"
                                                  app:scaleOffColor="@color/scaleOff"
+                                                 app:value="@{viewModel.revs}"
                                                  app:warningColor="@color/controlRed"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_voltage"
@@ -41,6 +42,7 @@
                                                   app:layout_widthPercent="15%"
                                                   app:maxValue="15.6"
                                                   app:minValue="12"
+                                                  app:value="@{viewModel.voltage}"
                                                   app:scaleColor="@color/scale"
                                                   app:scaleOffColor="@color/scaleOff"
                                                   app:title="@string/title_voltage"/>
@@ -49,6 +51,7 @@
                                                   android:layout_width="0dp"
                                                   android:layout_height="0dp"
                                                   app:layout_heightPercent="25%"
+                                                  app:value="@{viewModel.oilTemp}"
                                                   app:layout_marginLeftPercent="20%"
                                                   app:layout_marginTopPercent="80%"
                                                   app:layout_widthPercent="15%"
@@ -97,7 +100,7 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="center"
                                                       android:maxLines="1"
-                                                      android:text=""
+                                                      android:text="@{String.valueOf(viewModel.gear)}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="120dp"
                                                       app:customFont="digital.ttf"
@@ -131,7 +134,7 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="right"
                                                       android:maxLines="1"
-                                                      android:text=""
+                                                      android:text="@{String.valueOf(viewModel.speed)}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="200dp"
                                                       app:customFont="digital.ttf"
@@ -145,7 +148,7 @@
                                                       android:layout_alignBaseline="@id/textView_speed"
                                                       android:gravity="right"
                                                       android:maxLines="1"
-                                                      android:text=""
+                                                      android:text="@{String.valueOf(viewModel.revs)}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="40dp"
                                                       android:visibility="invisible"
@@ -184,6 +187,7 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="120"
                                                  app:minValue="60"
+                                                 app:value="@{viewModel.temp}"
                                                  app:scaleColor="@color/scale"
                                                  app:scaleOffColor="@color/scaleOff"/>
 
@@ -196,6 +200,7 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="100"
                                                  app:minValue="0"
+                                                 app:value="@{viewModel.fuel}"
                                                  app:scaleColor="@color/scale"
                                                  app:scaleOffColor="@color/scaleOff"/>
 
@@ -207,6 +212,7 @@
                                                      app:layout_marginLeftPercent="64%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
+                                                     app:enabled="@{viewModel.lowBeam}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -218,6 +224,7 @@
                                                      app:layout_marginLeftPercent="72%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
+                                                     app:enabled="@{viewModel.highBeam}"
                                                      app:scaleColor="@color/controlBlue"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -229,6 +236,7 @@
                                                      app:layout_marginLeftPercent="56%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
+                                                     app:enabled="@{viewModel.engine}"
                                                      app:scaleColor="@color/controlRed"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -240,6 +248,7 @@
                                                      app:layout_marginLeftPercent="48%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
+                                                     app:enabled="@{viewModel.neutral}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -251,6 +260,7 @@
                                                      app:layout_marginLeftPercent="40%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
+                                                     app:enabled="@{viewModel.turnlight}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
