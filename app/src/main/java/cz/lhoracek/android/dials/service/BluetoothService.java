@@ -14,7 +14,6 @@ import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.v4.content.LocalBroadcastManager;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
@@ -158,7 +157,7 @@ public class BluetoothService extends Service {
                                 public void call(BluetoothSocket socket) {
                                     // Connected to the device, do anything with the socket
                                     Log.d(this.toString(), "Connected to device");
-
+                                    
                                     try {
                                         BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
 
@@ -170,19 +169,22 @@ public class BluetoothService extends Service {
                                                 .subscribe(new Action1<String>() {
                                                     @Override
                                                     public void call(String string) {
-                                                        if(!TextUtils.isEmpty(string)) {
+                                                        //Log.d(this.toString(), "Received " + string);
                                                             // TODO parse JSON
                                                             EventBus.getDefault().post(new DataUpdateEvent(Integer.parseInt(string)));
-                                                        }
                                                         // This will be called every string received
                                                     }
                                                 }, new Action1<Throwable>() {
                                                     @Override
                                                     public void call(Throwable throwable) {
+                                                        Log.e(this.toString(), "Error receiving");
+                                                        throwable.printStackTrace();
                                                         // Error occured
+                                                        startBluetooth();
                                                     }
                                                 });
                                     } catch (Exception e) {
+                                        Log.e(this.toString(), "Error");
                                         e.printStackTrace();
                                     }
                                 }
@@ -190,6 +192,10 @@ public class BluetoothService extends Service {
                                 @Override
                                 public void call(Throwable throwable) {
                                     // Error occured
+
+                                    Log.e(this.toString(), "Error socket");
+                                    throwable.printStackTrace();
+                                    startBluetooth();
                                 }
                             });
                 }
