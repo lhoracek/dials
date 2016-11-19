@@ -19,16 +19,20 @@ public class BarView extends ValueView {
         super(ctx);
     }
 
+    private Rect mRect = new Rect();
+
     @Override
     public void onDraw(Canvas c) {
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
 
         mPaint.setColor(mColorOff);
-        c.drawRect(new Rect(0, 0, getWidth(), getHeight()), mPaint);
+        mRect.set(0, 0, getWidth(), getHeight());
+        c.drawRect(mRect, mPaint);
 
         float range = mMaxValue - mMinValue;
         float value = Math.max(0,mValue - mMinValue) / range;
         mPaint.setColor(mColor);
-        c.drawRect(new Rect(0, (int) (getHeight() * (1 - value)), getWidth(), getHeight()), mPaint);
+        mRect.set(0, (int) (getHeight() * (1 - value)), getWidth(), getHeight());
+        c.drawRect(mRect, mPaint);
     }
 }

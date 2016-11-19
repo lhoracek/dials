@@ -9,8 +9,6 @@ import android.util.AttributeSet;
 
 import java.text.DecimalFormat;
 
-import static android.R.attr.path;
-
 /**
  * Created by lhoracek on 1/25/16.
  */
@@ -29,6 +27,7 @@ public class DialView extends ValueView {
     }
 
     DecimalFormat formatter = new DecimalFormat("#,###.0");
+
     RectF mRectF = new RectF();
     Path mPath = new Path();
 
@@ -44,6 +43,7 @@ public class DialView extends ValueView {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH * 1.5f);
 
+        // TODO formatting withou new instances (caching?)
         c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
     }
 
@@ -68,6 +68,6 @@ public class DialView extends ValueView {
         mPath.arcTo(mRectF, startAngle, sweepDegrees);
         // innerCircle.
         mPath.close();
-        canvas.drawPath(path, paint);
+        canvas.drawPath(mPath, paint);
     }
 }

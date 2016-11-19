@@ -31,6 +31,7 @@
                                                  app:scaleLineColor="@color/scaleLine"
                                                  app:scaleOffColor="@color/scaleOff"
                                                  app:value="@{viewModel.revs}"
+                                                 app:warningMax="@{10000}"
                                                  app:warningColor="@color/controlRed"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_voltage"
