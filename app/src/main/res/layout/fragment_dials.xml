@@ -30,7 +30,7 @@
                                                  app:scaleColor="@color/scale"
                                                  app:scaleLineColor="@color/scaleLine"
                                                  app:scaleOffColor="@color/scaleOff"
-                                                 app:value="@{viewModel.values.revs ?? 0}"
+                                                 app:value="@{viewModel.values.rpm ?? 0}"
                                                  app:warningMax="@{10000}"
                                                  app:warningColor="@color/controlRed"/>
 
