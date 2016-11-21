@@ -35,12 +35,12 @@
                                                  app:warningMax="@{10000}"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_voltage"
-                                                  android:layout_width="0dp"
+                                                  android:layout_width="80dp"
                                                   android:layout_height="0dp"
-                                                  app:layout_heightPercent="25%"
+                                                  app:decimals="1"
+                                                  app:layout_aspectRatio="100%"
                                                   app:layout_marginLeftPercent="2%"
                                                   app:layout_marginTopPercent="80%"
-                                                  app:layout_widthPercent="15%"
                                                   app:maxValue="15.6"
                                                   app:minValue="12"
                                                   app:scaleColor="@color/scale"
@@ -49,12 +49,12 @@
                                                   app:value="@{viewModel.values.voltage ?? .0f}"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_oilTemp"
-                                                  android:layout_width="0dp"
+                                                  android:layout_width="80dp"
                                                   android:layout_height="0dp"
-                                                  app:layout_heightPercent="25%"
+                                                  app:decimals="0"
+                                                  app:layout_aspectRatio="100%"
                                                   app:layout_marginLeftPercent="20%"
                                                   app:layout_marginTopPercent="80%"
-                                                  app:layout_widthPercent="15%"
                                                   app:maxValue="150"
                                                   app:minValue="0"
                                                   app:scaleColor="@color/scale"
@@ -62,27 +62,7 @@
                                                   app:title="@string/title_oil_temp"
                                                   app:value="@{viewModel.values.oilTemp ?? .0f}"/>
 
-        <TextView android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:text="@string/title_oil_temp"
-                  android:textAllCaps="true"
-                  android:textColor="@color/titleColor"
-                  android:textSize="15dp"
-                  app:layout_marginLeftPercent="20%"
-                  app:layout_marginTopPercent="94%"
-                  app:layout_widthPercent="15%"/>
 
-        <TextView android:layout_width="0dp"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:text="@string/title_voltage"
-                  android:textAllCaps="true"
-                  android:textColor="@color/titleColor"
-                  android:textSize="15dp"
-                  app:layout_marginLeftPercent="2%"
-                  app:layout_marginTopPercent="94%"
-                  app:layout_widthPercent="15%"/>
 
         <cz.lhoracek.android.dials.views.TextViewPlus android:layout_width="wrap_content"
                                                       android:layout_height="wrap_content"

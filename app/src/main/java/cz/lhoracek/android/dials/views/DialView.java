@@ -1,6 +1,7 @@
 package cz.lhoracek.android.dials.views;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
@@ -8,6 +9,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 
 import java.text.DecimalFormat;
+
+import cz.lhoracek.android.dials.R;
 
 /**
  * Created by lhoracek on 1/25/16.
@@ -18,6 +21,8 @@ public class DialView extends ValueView {
     private static final int   START_ANGLE = 150;
     private static final int   SWEEP_ANGLE = 240;
 
+    protected int mDecimals = 0;
+
     public DialView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
@@ -26,10 +31,20 @@ public class DialView extends ValueView {
         super(ctx);
     }
 
-    DecimalFormat formatter = new DecimalFormat("#,###.0");
+    protected void readAttributes(Context ctx, AttributeSet attrs) {
+        super.readAttributes(ctx, attrs);
+        TypedArray a = ctx.obtainStyledAttributes(attrs, R.styleable.DialView);
+        mDecimals = a.getInt(R.styleable.DialView_decimals, 0);
+        formatter = new DecimalFormat("#,###.0");
+        formatter.setMaximumFractionDigits(mDecimals);
+        formatter.setMinimumFractionDigits(mDecimals);
+        a.recycle();
+    }
+
+    DecimalFormat formatter;
 
     RectF mRectF = new RectF();
-    Path mPath = new Path();
+    Path  mPath  = new Path();
 
     @Override
     public void onDraw(Canvas c) {
@@ -45,6 +60,7 @@ public class DialView extends ValueView {
 
         // TODO formatting withou new instances (caching?)
         c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
+        super.onDraw(c);
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {
@@ -52,6 +68,7 @@ public class DialView extends ValueView {
         float value = Math.max(0, mValue - mMinValue) / range;
 
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff);
+        //Log.d(getClass().getSimpleName(), "Min " + mMinValue + " max " + mMaxValue + " Range " + range + " real value " + mValue + " Value " + value);
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, mColor);
     }
 

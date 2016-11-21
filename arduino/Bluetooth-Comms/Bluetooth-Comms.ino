@@ -19,7 +19,7 @@ unsigned int odo = 0;
 unsigned int rpm = 0;
 unsigned int gear = 0;
 float voltage = 0;
-float oitTemp = 0;
+float oilTemp = 0;
 unsigned int speed = 0;
 float temp = 0;
 float fuel = 0;
@@ -30,7 +30,7 @@ boolean lowBeam = false;
 boolean highBeam = false;
 
 const int smoothSizeRpm = 100;
-const int smoothSizeSpeed = 1;
+const int smoothSizeSpeed = 20;
 unsigned long lastRpms[smoothSizeRpm];
 unsigned long lastSpeeds[smoothSizeSpeed];
 int readIndexRpm = 0;
@@ -74,15 +74,15 @@ void setup()
 }
 
 void triggerRpm() {
-  readIndexRpm = (readIndexRpm + 1) % smoothSizeRpm;
   lastRpms[readIndexRpm] = (micros() - lastRpm);
   lastRpm = micros();
+  readIndexRpm = (readIndexRpm + 1) % smoothSizeRpm;
 }
 
 void triggerSpeed() {
-  readIndexSpeed = (readIndexSpeed + 1) % smoothSizeSpeed;
   lastSpeeds[readIndexSpeed] = (micros() - lastSpeed);
   lastSpeed = micros();
+  readIndexSpeed = (readIndexSpeed + 1) % smoothSizeSpeed;
 }
 
 void stateValue(char* name, unsigned int value, boolean last) {
@@ -115,6 +115,11 @@ void updateState() {
   highBeam = 1 - digitalRead(highBeamPin);
 
   // read analog values
+  voltage = 13.9;
+  oilTemp = 110;
+  temp = 110;
+  fuel = 90;
+
 
   // smooth last pulse values
   unsigned long sum = 0;
@@ -122,7 +127,7 @@ void updateState() {
     sum = sum + lastRpms[i];
   }
   rpm = SECOND / (sum / smoothSizeRpm);
-  
+
   sum = 0;
   for (int i = 0; i < smoothSizeSpeed; i++) {
     sum = sum + lastSpeeds[i];
@@ -139,7 +144,7 @@ void sendState() {
   stateValue("gear", gear, false);
   stateValue("speed", speed, false);
   stateValue("voltage", voltage, false);
-  stateValue("oilTemp", oitTemp, false);
+  stateValue("oilTemp", oilTemp, false);
   stateValue("turnlight", turnlight, false);
   stateValue("neutral", neutral, false);
   stateValue("engine", engine, false);
@@ -156,14 +161,14 @@ unsigned long time;
 void loop()
 {
   updateState();
-  Serial.print(rpm);
-  Serial.print(" : ");
-  Serial.println(speed);
+//  Serial.print(rpm);
+//  Serial.print(" : ");
+//  Serial.println(speed);
   time = micros();
 
   sendState(); // send state through to bluetooth
   // check for incoming bytes
-  //noInterrupts();
+  noInterrupts();
   if (bluetooth.available())
   {
     // TODO copy to char* and check for \n
@@ -173,7 +178,7 @@ void loop()
     //    btBuffer[len] = in// Store it
     //    btBuffer[len+1] = '\0'; // Null terminate the string
   }
-  //interrupts();
+  interrupts();
   time = micros() -  time;
 
   int diff = millis() - lastIn;

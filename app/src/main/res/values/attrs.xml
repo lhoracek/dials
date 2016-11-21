@@ -13,4 +13,8 @@
         <attr name="minValue" format="float"/>
         <attr name="controlIcon" format="integer"/>
     </declare-styleable>
+
+    <declare-styleable name="DialView">
+        <attr name="decimals" format="integer"/>
+    </declare-styleable>
 </resources>

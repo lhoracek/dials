@@ -45,6 +45,7 @@ public class RPMView extends ValueView {
         mPaint.setColor(mColor);
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         drawArcs(c, mPaint);
+        super.onDraw(c);
     }
 
     private void drawArcs(Canvas canvas, Paint paint) {

@@ -34,5 +34,6 @@ public class BarView extends ValueView {
         mPaint.setColor(mColor);
         mRect.set(0, (int) (getHeight() * (1 - value)), getWidth(), getHeight());
         c.drawRect(mRect, mPaint);
+        super.onDraw(c);
     }
 }
