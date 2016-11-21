@@ -178,11 +178,10 @@ public class BluetoothService extends Service {
                                                 .subscribe(new Action1<String>() {
                                                     @Override
                                                     public void call(String string) {
-                                                        Log.d(this.toString(), "Incomming " + string);
+                                                        //Log.d(this.toString(), "Incomming " + string);
                                                         try {
                                                             Values values = mGson.fromJson(string, Values.class);
                                                             EventBus.getDefault().post(new DataUpdateEvent(values));
-                                                           //bluetoothConnection.send("X");
                                                         }catch (Exception e){
                                                             Log.e(this.toString(), "Error receiving " + string, e);
                                                         }

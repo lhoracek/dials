@@ -2,7 +2,7 @@
 
     <data>
         <variable name="viewModel" type="cz.lhoracek.android.dials.model.DialsModel"/>
-       <import type="java.lang.String" />
+        <import type="java.lang.String"/>
     </data>
 
     <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -31,8 +31,8 @@
                                                  app:scaleLineColor="@color/scaleLine"
                                                  app:scaleOffColor="@color/scaleOff"
                                                  app:value="@{viewModel.values.rpm ?? 0}"
-                                                 app:warningMax="@{10000}"
-                                                 app:warningColor="@color/controlRed"/>
+                                                 app:warningColor="@color/controlRed"
+                                                 app:warningMax="@{10000}"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_voltage"
                                                   android:layout_width="0dp"
@@ -43,16 +43,15 @@
                                                   app:layout_widthPercent="15%"
                                                   app:maxValue="15.6"
                                                   app:minValue="12"
-                                                  app:value="@{viewModel.values.voltage ?? .0f}"
                                                   app:scaleColor="@color/scale"
                                                   app:scaleOffColor="@color/scaleOff"
-                                                  app:title="@string/title_voltage"/>
+                                                  app:title="@string/title_voltage"
+                                                  app:value="@{viewModel.values.voltage ?? .0f}"/>
 
         <cz.lhoracek.android.dials.views.DialView android:id="@+id/dialView_oilTemp"
                                                   android:layout_width="0dp"
                                                   android:layout_height="0dp"
                                                   app:layout_heightPercent="25%"
-                                                  app:value="@{viewModel.values.oilTemp ?? .0f}"
                                                   app:layout_marginLeftPercent="20%"
                                                   app:layout_marginTopPercent="80%"
                                                   app:layout_widthPercent="15%"
@@ -60,7 +59,8 @@
                                                   app:minValue="0"
                                                   app:scaleColor="@color/scale"
                                                   app:scaleOffColor="@color/scaleOff"
-                                                  app:title="@string/title_oil_temp"/>
+                                                  app:title="@string/title_oil_temp"
+                                                  app:value="@{viewModel.values.oilTemp ?? .0f}"/>
 
         <TextView android:layout_width="0dp"
                   android:layout_height="wrap_content"
@@ -84,30 +84,28 @@
                   app:layout_marginTopPercent="94%"
                   app:layout_widthPercent="15%"/>
 
-        <cz.lhoracek.android.dials.views.TextViewPlus android:layout_width="0dp"
+        <cz.lhoracek.android.dials.views.TextViewPlus android:layout_width="wrap_content"
                                                       android:layout_height="wrap_content"
                                                       android:gravity="center"
                                                       android:maxLines="1"
                                                       android:text="8"
                                                       android:textColor="@color/scaleOff"
                                                       android:textSize="120dp"
-                                                      app:customFont="digital.ttf"
-                                                      app:layout_marginLeftPercent="0%"
-                                                      app:layout_marginTopPercent="2%"
-                                                      app:layout_widthPercent="15%"/>
+                                                      app:customFont="dd.otf"
+                                                      app:layout_marginLeftPercent="2%"
+                                                      app:layout_marginTopPercent="2%"/>
 
         <cz.lhoracek.android.dials.views.TextViewPlus android:id="@+id/textView_gear"
-                                                      android:layout_width="0dp"
+                                                      android:layout_width="wrap_content"
                                                       android:layout_height="wrap_content"
                                                       android:gravity="center"
                                                       android:maxLines="1"
-                                                      android:text="@{viewModel.values.gear != null &amp;&amp; viewModel.values.gear > 0 ? String.valueOf(viewModel.values.gear) : null}"
+                                                      android:text="@{viewModel.values.gear != null &amp;&amp; viewModel.values.gear > 0 ? String.valueOf(viewModel.values.gear) : null, default=3}"
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="120dp"
-                                                      app:customFont="digital.ttf"
-                                                      app:layout_marginLeftPercent="0%"
-                                                      app:layout_marginTopPercent="2%"
-                                                      app:layout_widthPercent="15%"/>
+                                                      app:customFont="dd.otf"
+                                                      app:layout_marginLeftPercent="2%"
+                                                      app:layout_marginTopPercent="2%"/>
 
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
@@ -125,9 +123,9 @@
                                                       android:text="888"
                                                       android:textColor="@color/scaleOff"
                                                       android:textSize="200dp"
-                                                      app:customFont="digital.ttf"
+                                                      app:customFont="dd.otf"
                                                       app:layout_marginLeftPercent="30%"
-                                                      app:layout_marginTopPercent="30%"
+                                                      app:layout_marginTopPercent="40%"
                                                       app:layout_widthPercent="50%"/>
 
         <cz.lhoracek.android.dials.views.TextViewPlus android:id="@+id/textView_speed"
@@ -135,17 +133,16 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="right"
                                                       android:maxLines="1"
-                                                      android:text="@{viewModel.values.speed != null ? String.valueOf(viewModel.values.speed) : null}"
+                                                      android:text='@{viewModel.values.speed != null ? String.valueOf(viewModel.values.speed): null}'
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="200dp"
-                                                      app:customFont="digital.ttf"
+                                                      app:customFont="dd.otf"
                                                       app:layout_marginLeftPercent="30%"
-                                                      app:layout_marginTopPercent="30%"
+                                                      app:layout_marginTopPercent="40%"
                                                       app:layout_widthPercent="50%"/>
 
 
-        <cz.lhoracek.android.dials.views.TextViewPlus
-                                                      android:layout_width="0dp"
+        <cz.lhoracek.android.dials.views.TextViewPlus android:layout_width="0dp"
                                                       android:layout_height="wrap_content"
                                                       android:layout_alignBaseline="@id/textView_speed"
                                                       android:gravity="right"
@@ -153,7 +150,7 @@
                                                       android:text="88888"
                                                       android:textColor="@color/scaleOff"
                                                       android:textSize="40dp"
-                                                      app:customFont="digital.ttf"
+                                                      app:customFont="dd.otf"
                                                       app:layout_marginLeftPercent="8%"
                                                       app:layout_marginRightPercent="10%"
                                                       app:layout_marginTopPercent="10%"
@@ -169,7 +166,7 @@
                                                       android:textColor="@color/numberColor"
                                                       android:textSize="40dp"
                                                       android:visibility="visible"
-                                                      app:customFont="digital.ttf"
+                                                      app:customFont="dd.otf"
                                                       app:layout_marginLeftPercent="8%"
                                                       app:layout_marginTopPercent="10%"
                                                       app:layout_widthPercent="25%"/>
@@ -188,7 +185,7 @@
                   android:layout_height="wrap_content"
                   android:layout_alignRight="@id/textView_speed"
                   android:layout_alignTop="@id/textView_speed"
-                  android:layout_marginTop="15dp"
+                  android:layout_marginTop="-18dp"
                   android:text="@string/unit_speed"
                   android:textAllCaps="true"
                   android:textColor="@color/titleColor"
@@ -204,9 +201,9 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="120"
                                                  app:minValue="60"
-                                                 app:value="@{viewModel.values.temp ?? .0f}"
                                                  app:scaleColor="@color/scale"
-                                                 app:scaleOffColor="@color/scaleOff"/>
+                                                 app:scaleOffColor="@color/scaleOff"
+                                                 app:value="@{viewModel.values.temp ?? .0f}"/>
 
         <cz.lhoracek.android.dials.views.BarView android:id="@+id/barView_fuel"
                                                  android:layout_width="0dp"
@@ -217,19 +214,19 @@
                                                  app:layout_widthPercent="5%"
                                                  app:maxValue="100"
                                                  app:minValue="0"
-                                                 app:value="@{viewModel.values.fuel ?? .0f}"
                                                  app:scaleColor="@color/scale"
-                                                 app:scaleOffColor="@color/scaleOff"/>
+                                                 app:scaleOffColor="@color/scaleOff"
+                                                 app:value="@{viewModel.values.fuel ?? .0f}"/>
 
         <cz.lhoracek.android.dials.views.ControlView android:id="@+id/control_lowBeam"
                                                      android:layout_width="0dp"
                                                      android:layout_height="0dp"
                                                      app:controlIcon="@drawable/lights51"
+                                                     app:enabled="@{viewModel.values.lowBeam ?? false}"
                                                      app:layout_heightPercent="12%"
                                                      app:layout_marginLeftPercent="64%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.values.lowBeam ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -237,11 +234,11 @@
                                                      android:layout_width="0dp"
                                                      android:layout_height="0dp"
                                                      app:controlIcon="@drawable/lights50"
+                                                     app:enabled="@{viewModel.values.highBeam ?? false}"
                                                      app:layout_heightPercent="12%"
                                                      app:layout_marginLeftPercent="72%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.values.highBeam ?? false}"
                                                      app:scaleColor="@color/controlBlue"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -249,11 +246,11 @@
                                                      android:layout_width="0dp"
                                                      android:layout_height="0dp"
                                                      app:controlIcon="@drawable/engine2"
+                                                     app:enabled="@{viewModel.values.engine ?? false}"
                                                      app:layout_heightPercent="12%"
                                                      app:layout_marginLeftPercent="56%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.values.engine ?? false}"
                                                      app:scaleColor="@color/controlRed"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -261,11 +258,11 @@
                                                      android:layout_width="0dp"
                                                      android:layout_height="0dp"
                                                      app:controlIcon="@drawable/greek44"
+                                                     app:enabled="@{viewModel.values.neutral ?? false}"
                                                      app:layout_heightPercent="12%"
                                                      app:layout_marginLeftPercent="48%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.values.neutral ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 
@@ -273,11 +270,11 @@
                                                      android:layout_width="0dp"
                                                      android:layout_height="0dp"
                                                      app:controlIcon="@drawable/arrow216"
+                                                     app:enabled="@{viewModel.values.turnlight ?? false}"
                                                      app:layout_heightPercent="12%"
                                                      app:layout_marginLeftPercent="40%"
                                                      app:layout_marginTopPercent="83%"
                                                      app:layout_widthPercent="7%"
-                                                     app:enabled="@{viewModel.values.turnlight ?? false}"
                                                      app:scaleColor="@color/controlGreen"
                                                      app:scaleOffColor="@color/scaleOff"/>
 

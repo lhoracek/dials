@@ -1,5 +1,9 @@
 #include <SoftwareSerial.h>
+#include <EEPROM.h>
+
 SoftwareSerial bluetooth(10, 11);
+
+const unsigned long SECOND = 1000000;
 
 const byte rpmPin = 2;
 const byte speedPin = 3;
@@ -26,15 +30,15 @@ boolean lowBeam = false;
 boolean highBeam = false;
 
 const int smoothSizeRpm = 100;
-const int smoothSizeSpeed = 10;
-int lastRpms[smoothSizeRpm];
-int lastSpeeds[smoothSizeSpeed];
+const int smoothSizeSpeed = 1;
+unsigned long lastRpms[smoothSizeRpm];
+unsigned long lastSpeeds[smoothSizeSpeed];
 int readIndexRpm = 0;
 int readIndexSpeed = 0;
-unsigned long lastRpm;
-unsigned long lastSpeed;
+unsigned long lastRpm = 0;
+unsigned long lastSpeed = 0;
 
-char a; // stores incoming character from other device
+char btBuffer[256]; // stores incoming character from bluetooth
 unsigned long lastIn; //
 
 void setup()
@@ -61,20 +65,24 @@ void setup()
   delay(10);
   attachInterrupt(digitalPinToInterrupt(rpmPin), triggerRpm, RISING);
   delay(10);
+  for (int i = 0; i < smoothSizeRpm; i++) {
+    lastRpms[i] = 0 - 1; // set max long values
+  }
+  for (int i = 0; i < smoothSizeSpeed; i++) {
+    lastSpeeds[i] = 0 - 1; // set max long values
+  }
 }
 
 void triggerRpm() {
-  int lastIndex = readIndexRpm;
   readIndexRpm = (readIndexRpm + 1) % smoothSizeRpm;
-  lastRpms[readIndexRpm] = (micros() - lastRpms[lastIndex]);
+  lastRpms[readIndexRpm] = (micros() - lastRpm);
   lastRpm = micros();
 }
 
 void triggerSpeed() {
-
-  speed = (1000000 / (micros() - lastSpeed)) / 100;
+  readIndexSpeed = (readIndexSpeed + 1) % smoothSizeSpeed;
+  lastSpeeds[readIndexSpeed] = (micros() - lastSpeed);
   lastSpeed = micros();
-  readIndexSpeed++;
 }
 
 void stateValue(char* name, unsigned int value, boolean last) {
@@ -98,29 +106,29 @@ void stateValue(char* name, boolean value, boolean last) {
   bluetooth.print(last ? "" : ", ");
 }
 
-void updateState{
+void updateState() {
   // read digital values (using grounding with pullup now)
   turnlight = 1 - digitalRead(turnPin);
   neutral = 1 - digitalRead(neutralPin);
   engine = 1 - digitalRead(enginePin);
   lowBeam = 1 - digitalRead(lowBeamPin);
-  hightBeam = 1 - digitalRead(highBeamPin);
+  highBeam = 1 - digitalRead(highBeamPin);
 
   // read analog values
 
-
   // smooth last pulse values
-  int sum = 0;
+  unsigned long sum = 0;
   for (int i = 0; i < smoothSizeRpm; i++) {
-    sum += lastRpms[i];
+    sum = sum + lastRpms[i];
   }
-  rpm = 1000000 / (sum / smoothSizeRpm);
-
+  rpm = SECOND / (sum / smoothSizeRpm);
+  
   sum = 0;
   for (int i = 0; i < smoothSizeSpeed; i++) {
-    sum += lastSpeeds[i];
+    sum = sum + lastSpeeds[i];
   }
-  speed = 1000000 / (sum / smoothSizeSpeed);
+  speed = (SECOND / (sum / smoothSizeSpeed)) / 10;
+  
 }
 
 void sendState() {
@@ -148,21 +156,26 @@ unsigned long time;
 void loop()
 {
   updateState();
-
+  Serial.print(rpm);
+  Serial.print(" : ");
+  Serial.println(speed);
   time = micros();
-  noInterrupts();
-  sendState(); // send state through to bluetooth
 
+  sendState(); // send state through to bluetooth
   // check for incoming bytes
+  //noInterrupts();
   if (bluetooth.available())
   {
     // TODO copy to char* and check for \n
+    char in =  bluetooth.read();
     lastIn = millis();
-    a = (bluetooth.read());
+    //    int len = strlen(btBuffer);
+    //    btBuffer[len] = in// Store it
+    //    btBuffer[len+1] = '\0'; // Null terminate the string
   }
-  interrupts();
+  //interrupts();
   time = micros() -  time;
-  
+
   int diff = millis() - lastIn;
   digitalWrite(statusPin, (diff) > 1000 ? 0 : 1);
 
