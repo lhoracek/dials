@@ -8,8 +8,11 @@
     <string name="title_oil_temp">Oil</string>
     <string name="title_gear">Gear</string>
 
-
     <string name="unit_rpm">rpm</string>
     <string name="unit_speed">km/h</string>
+
+    <string name="notification_stop">Stop</string>
+    <string name="notification_running">Gauges are running in background</string>
+    <string name="notification_running_detail">Bike communication is active. Tap to show gauges.</string>
 
 </resources>

@@ -29,8 +29,8 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
-import cz.lhoracek.android.dials.activity.MainActivity;
 import cz.lhoracek.android.dials.R;
+import cz.lhoracek.android.dials.activity.MainActivity;
 import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import cz.lhoracek.android.dials.model.Values;
 import rx.android.schedulers.AndroidSchedulers;
@@ -236,7 +236,6 @@ public class BluetoothService extends Service {
     }
 
     private void showNotification() {
-        Log.d(this.toString(), "Show notification");
         Intent notifyIntent = new Intent(this, MainActivity.class);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent launchPendingIntent = PendingIntent.getActivity(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -245,17 +244,16 @@ public class BluetoothService extends Service {
         PendingIntent stopPendingIntent = PendingIntent.getBroadcast(this, 1, stopIntent, PendingIntent.FLAG_ONE_SHOT);
         Notification notification = new Notification.Builder(this)
                 .setContentIntent(launchPendingIntent)
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Bluetooth running")
-                .setContentText("Headphone loopback is running")
-                .addAction(R.mipmap.ic_launcher, "Stop playback", stopPendingIntent)
+                .setSmallIcon(R.drawable.ic_gauge_notification)
+                .setContentTitle(getString(R.string.notification_running))
+                .setContentText(getString(R.string.notification_running_detail))
+                .addAction(new Notification.Action.Builder(R.drawable.ic_close_24, getString(R.string.notification_stop), stopPendingIntent).build())
                 .build();
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(R.id.notification, notification);
     }
 
     private void hideNotification() {
-        Log.d(this.toString(), "Cancel notification");
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.cancel(R.id.notification);
     }
