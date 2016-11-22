@@ -3,7 +3,8 @@
 
 SoftwareSerial bluetooth(10, 11);
 
-const unsigned long SECOND = 1*1000*1000;
+const unsigned long SECOND = 1 * 1000 * 1000;
+const unsigned long ZEROING = 200 * 1000;
 
 const byte rpmPin = 2;
 const byte speedPin = 3;
@@ -65,12 +66,23 @@ void setup()
   delay(10);
   attachInterrupt(digitalPinToInterrupt(rpmPin), triggerRpm, RISING);
   delay(10);
+
+  clearSpeed();
+  clearRpm();
+
+}
+
+void clearRpm() {
   for (int i = 0; i < smoothSizeRpm; i++) {
     lastRpms[i] = 0 - 1; // set max long values
   }
+  lastRpm = 0;
+}
+void clearSpeed() {
   for (int i = 0; i < smoothSizeSpeed; i++) {
     lastSpeeds[i] = 0 - 1; // set max long values
   }
+  lastSpeed = 0;
 }
 
 void triggerRpm() {
@@ -122,16 +134,20 @@ void updateState() {
 
 
   // smooth last pulse values
+  if (lastRpm > 0 &&  (getMicros() - lastRpm) > ZEROING) {
+    clearRpm();
+  }
+
   unsigned long sum = 0;
   for (int i = 0; i < smoothSizeRpm; i++) {
     sum = sum + lastRpms[i];
   }
-  
   rpm = SECOND / (sum / smoothSizeRpm);
-    Serial.print(sum);
-    Serial.print(" : ");
-    Serial.print(smoothSizeRpm);
-    Serial.print(" : ");
+
+  // reset values to zero
+  if (lastSpeed > 0 &&  (getMicros() - lastSpeed) > ZEROING) {
+    clearSpeed();
+  }
   sum = 0;
   for (int i = 0; i < smoothSizeSpeed; i++) {
     sum = sum + lastSpeeds[i];
@@ -160,7 +176,7 @@ void sendState() {
   bluetooth.print("\n");
 }
 
-void printState(){
+void printState() {
   Serial.print(rpm);
   Serial.print(" : ");
   Serial.println(speed);
@@ -171,7 +187,7 @@ char in;
 void loop()
 {
   updateState();
- 
+
   time = micros();
   noInterrupts();
   sendState(); // send state through to bluetooth

@@ -29,7 +29,7 @@ import java.util.UUID;
 import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
-import cz.lhoracek.android.dials.MainActivity;
+import cz.lhoracek.android.dials.activity.MainActivity;
 import cz.lhoracek.android.dials.R;
 import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import cz.lhoracek.android.dials.model.Values;

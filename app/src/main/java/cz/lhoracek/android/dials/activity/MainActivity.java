@@ -1,4 +1,4 @@
-package cz.lhoracek.android.dials;
+package cz.lhoracek.android.dials.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
+import cz.lhoracek.android.dials.R;
 import cz.lhoracek.android.dials.service.BluetoothService;
 
 /**

@@ -16,7 +16,7 @@ android {
 
     defaultConfig {
         applicationId "cz.lhoracek.android.dials"
-        minSdkVersion 19
+        minSdkVersion 21
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"

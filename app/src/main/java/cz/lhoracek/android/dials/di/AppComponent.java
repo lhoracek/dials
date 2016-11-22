@@ -10,7 +10,7 @@ package cz.lhoracek.android.dials.di;
 
 import javax.inject.Singleton;
 
-import cz.lhoracek.android.dials.MainActivity;
+import cz.lhoracek.android.dials.activity.MainActivity;
 import cz.lhoracek.android.dials.fragment.DialsFragment;
 import cz.lhoracek.android.dials.service.BluetoothService;
 import dagger.Component;
