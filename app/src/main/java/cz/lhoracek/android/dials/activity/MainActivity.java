@@ -22,7 +22,7 @@ import cz.lhoracek.android.dials.service.BluetoothService;
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
-public class MainActivity extends AppCompatActivity  {
+public class MainActivity extends AppCompatActivity {
 
     public static final String UPDATE_BROADCAST  = "services_state_changed";
     public static final int    REQUEST_ENABLE_BT = 1;
@@ -34,8 +34,8 @@ public class MainActivity extends AppCompatActivity  {
     private View mDecorView;
     private View mMainView;
 
-    private final Handler mLeanBackHandler = new Handler();
-    private final Runnable mEnterLeanback = new Runnable() {
+    private final Handler  mLeanBackHandler = new Handler();
+    private final Runnable mEnterLeanback   = new Runnable() {
         @Override
         public void run() {
             enableFullScreen(true);

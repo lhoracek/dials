@@ -19,7 +19,7 @@
     </style>
 
     <style name="FullscreenThemeSplash" parent="FullscreenTheme">
-        <item name="android:windowBackground">@drawable/engine2</item>
+        <item name="android:windowBackground">@drawable/ic_gauge</item>
         <item name="android:windowContentOverlay">@null</item>
     </style>
 </resources>

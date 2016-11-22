@@ -12,18 +12,18 @@
                  android:supportsRtl="true"
                  android:theme="@style/AppTheme">
         <activity android:name=".activity.SplashActivity"
-                  android:theme="@style/FullscreenThemeSplash"/>
-        <activity android:name=".activity.MainActivity"
-                  android:configChanges="orientation|keyboardHidden|screenSize"
-                  android:label="@string/title_activity_fullscreen"
-                  android:screenOrientation="landscape"
-                  android:theme="@style/FullscreenTheme">
+                  android:theme="@style/FullscreenThemeSplash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity android:name=".activity.MainActivity"
+                  android:configChanges="orientation|keyboardHidden|screenSize"
+                  android:label="@string/title_activity_fullscreen"
+                  android:screenOrientation="landscape"
+                  android:theme="@style/FullscreenTheme"/>
 
         <service android:name=".service.BluetoothService" android:exported="false"/>
     </application>
