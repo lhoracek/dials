@@ -13,6 +13,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Binder;
 import android.os.IBinder;
+import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
@@ -45,8 +46,9 @@ public class BluetoothService extends Service {
     private final IBinder myBinder = new BluetoothBinder();
     private       boolean running  = false;
 
-    @Inject Gson             mGson;
-    @Inject BluetoothAdapter mBluetoothAdapter;
+    @Inject           Gson             mGson;
+    @Inject @Nullable BluetoothAdapter mBluetoothAdapter;
+
 
     public BluetoothService() {
         App.component().inject(this);
@@ -82,6 +84,11 @@ public class BluetoothService extends Service {
             running = true;
             Log.d(this.toString(), "Starting");
 
+            if (mBluetoothAdapter == null) {
+                // Device does not support Bluetooth
+                // TODO
+                return super.onStartCommand(intent, flags, startId);
+            }
             startBluetooth();
 
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.UPDATE_BROADCAST));
@@ -182,7 +189,7 @@ public class BluetoothService extends Service {
                                                         try {
                                                             Values values = mGson.fromJson(string, Values.class);
                                                             EventBus.getDefault().post(new DataUpdateEvent(values));
-                                                        }catch (Exception e){
+                                                        } catch (Exception e) {
                                                             Log.e(this.toString(), "Error receiving " + string, e);
                                                         }
                                                     }
@@ -193,7 +200,7 @@ public class BluetoothService extends Service {
                                                         throwable.printStackTrace();
                                                         // Error occured
                                                         // TODO
-                                                       startBluetooth();
+                                                        startBluetooth();
                                                     }
                                                 });
                                     } catch (Exception e) {

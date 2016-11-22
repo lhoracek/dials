@@ -30,9 +30,10 @@ public class BarView extends ValueView {
         c.drawRect(mRect, mPaint);
 
         float range = mMaxValue - mMinValue;
-        float value = Math.max(0,mValue - mMinValue) / range;
-        mPaint.setColor(mColor);
+        float value = Math.max(0, mValue - mMinValue) / range;
+        mPaint.setColor(((mValue > mWarningMaxValue) || (mValue < mWarningMinValue)) ? mWarningColor : mColor);
         mRect.set(0, (int) (getHeight() * (1 - value)), getWidth(), getHeight());
+
         c.drawRect(mRect, mPaint);
         super.onDraw(c);
     }

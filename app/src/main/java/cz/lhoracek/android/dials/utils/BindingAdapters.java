@@ -19,7 +19,7 @@ public class BindingAdapters {
     }
 
     @BindingAdapter("warningMax")
-    public static void setWarningMax(ValueView valueView, int warning){
+    public static void setWarningMax(ValueView valueView, float warning){
         valueView.setWarningMaxValue(warning);
     }
 

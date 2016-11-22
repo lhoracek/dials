@@ -11,6 +11,8 @@
         <attr name="caption" format="string"/>
         <attr name="maxValue" format="float"/>
         <attr name="minValue" format="float"/>
+        <attr name="maxWarning" format="float"/>
+        <attr name="minWarning" format="float"/>
         <attr name="controlIcon" format="integer"/>
     </declare-styleable>
 

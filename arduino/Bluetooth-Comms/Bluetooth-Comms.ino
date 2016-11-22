@@ -3,7 +3,7 @@
 
 SoftwareSerial bluetooth(10, 11);
 
-const unsigned long SECOND = 1000000;
+const unsigned long SECOND = 1*1000*1000;
 
 const byte rpmPin = 2;
 const byte speedPin = 3;
@@ -29,8 +29,8 @@ boolean engine = false;
 boolean lowBeam = false;
 boolean highBeam = false;
 
-const int smoothSizeRpm = 100;
-const int smoothSizeSpeed = 20;
+const int smoothSizeRpm = 1;
+const int smoothSizeSpeed = 1;
 unsigned long lastRpms[smoothSizeRpm];
 unsigned long lastSpeeds[smoothSizeSpeed];
 int readIndexRpm = 0;
@@ -115,10 +115,10 @@ void updateState() {
   highBeam = 1 - digitalRead(highBeamPin);
 
   // read analog values
-  voltage = 13.9;
+  voltage = 11.9;
   oilTemp = 110;
-  temp = 110;
-  fuel = 90;
+  temp = 105;
+  fuel = 15;
 
 
   // smooth last pulse values
@@ -126,14 +126,18 @@ void updateState() {
   for (int i = 0; i < smoothSizeRpm; i++) {
     sum = sum + lastRpms[i];
   }
+  
   rpm = SECOND / (sum / smoothSizeRpm);
-
+    Serial.print(sum);
+    Serial.print(" : ");
+    Serial.print(smoothSizeRpm);
+    Serial.print(" : ");
   sum = 0;
   for (int i = 0; i < smoothSizeSpeed; i++) {
     sum = sum + lastSpeeds[i];
   }
   speed = (SECOND / (sum / smoothSizeSpeed)) / 10;
-  
+
 }
 
 void sendState() {
@@ -156,23 +160,27 @@ void sendState() {
   bluetooth.print("\n");
 }
 
-unsigned long time;
+void printState(){
+  Serial.print(rpm);
+  Serial.print(" : ");
+  Serial.println(speed);
+}
 
+unsigned long time;
+char in;
 void loop()
 {
   updateState();
-//  Serial.print(rpm);
-//  Serial.print(" : ");
-//  Serial.println(speed);
+ 
   time = micros();
-
-  sendState(); // send state through to bluetooth
-  // check for incoming bytes
   noInterrupts();
+  sendState(); // send state through to bluetooth
+  printState();
+  // check for incoming bytes
   if (bluetooth.available())
   {
     // TODO copy to char* and check for \n
-    char in =  bluetooth.read();
+    in =  bluetooth.read();
     lastIn = millis();
     //    int len = strlen(btBuffer);
     //    btBuffer[len] = in// Store it

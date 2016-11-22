@@ -11,6 +11,7 @@ import android.view.View;
 
 import cz.lhoracek.android.dials.R;
 
+
 /**
  * Created by lhoracek on 1/25/16.
  */
@@ -23,8 +24,7 @@ public abstract class ValueView extends View {
     protected int mScaleColor     = Color.WHITE;
     protected int mWarningColor     = Color.TRANSPARENT;
 
-    protected int mWarningMaxValue = Integer.MAX_VALUE;
-    protected int mWarningMinValue = Integer.MIN_VALUE;
+    protected float mWarningMaxValue, mWarningMinValue;
 
     public ValueView(Context context) {
         super(context);
@@ -59,19 +59,19 @@ public abstract class ValueView extends View {
         return mMaxValue;
     }
 
-    public int getWarningMaxValue() {
+    public float getWarningMaxValue() {
         return mWarningMaxValue;
     }
 
-    public void setWarningMaxValue(int mWarningMaxValue) {
+    public void setWarningMaxValue(float mWarningMaxValue) {
         this.mWarningMaxValue = mWarningMaxValue;
     }
 
-    public int getWarningMinValue() {
+    public float getWarningMinValue() {
         return mWarningMinValue;
     }
 
-    public void setWarningMinValue(int mWarningMinValue) {
+    public void setWarningMinValue(float mWarningMinValue) {
         this.mWarningMinValue = mWarningMinValue;
     }
 
@@ -84,6 +84,9 @@ public abstract class ValueView extends View {
 
         mMinValue = a.getFloat(R.styleable.ValueView_minValue, 0f);
         mMaxValue = a.getFloat(R.styleable.ValueView_maxValue, 0f);
+
+        mWarningMaxValue = a.getFloat(R.styleable.ValueView_maxWarning, Float.MAX_VALUE);
+        mWarningMinValue = a.getFloat(R.styleable.ValueView_minWarning, Float.MIN_VALUE);
         a.recycle();
     }
 

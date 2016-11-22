@@ -12,6 +12,7 @@ import android.app.Application;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.location.LocationManager;
+import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -62,7 +63,8 @@ public class AppModule {
 
     @Provides
     @Singleton
-    BluetoothAdapter provideBluetoothAdapter(){
+    @Nullable
+    BluetoothAdapter provideBluetoothAdapter() {
         return BluetoothAdapter.getDefaultAdapter();
     }
 }
