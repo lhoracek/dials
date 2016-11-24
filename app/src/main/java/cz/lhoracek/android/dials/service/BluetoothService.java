@@ -43,8 +43,9 @@ import rx.schedulers.Schedulers;
 public class BluetoothService extends Service {
     public static final String STOP_BROADCAST = "services_stop_service";
 
-    private final IBinder myBinder = new BluetoothBinder();
-    private       boolean running  = false;
+    private final IBinder myBinder  = new BluetoothBinder();
+    private       boolean running   = false;
+    private       boolean connected = false;
 
     @Inject           Gson             mGson;
     @Inject @Nullable BluetoothAdapter mBluetoothAdapter;
@@ -86,11 +87,10 @@ public class BluetoothService extends Service {
 
             if (mBluetoothAdapter == null) {
                 // Device does not support Bluetooth
-                // TODO
                 return super.onStartCommand(intent, flags, startId);
             }
-            startBluetooth();
 
+            startBluetooth();
             LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.UPDATE_BROADCAST));
             registerReceiver(mMessageReceiver, new IntentFilter(STOP_BROADCAST));
 
