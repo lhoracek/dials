@@ -4,13 +4,16 @@ import android.bluetooth.BluetoothAdapter;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
+import cz.lhoracek.android.dials.events.bluetooth.TurnedOffEvent;
+import cz.lhoracek.android.dials.events.bluetooth.TurnedOnEvent;
+import cz.lhoracek.android.dials.events.bluetooth.TurningOffEvent;
+import cz.lhoracek.android.dials.events.bluetooth.TurningOnEvent;
 
 /**
  * Created by horaclu2 on 24/11/16.
@@ -26,21 +29,20 @@ public class BluetoothStateBroadcastReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        // TODO
         final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
                 BluetoothAdapter.ERROR);
         switch (state) {
             case BluetoothAdapter.STATE_OFF:
-                Log.d(getClass().getSimpleName(), "Bluetooth off");
+                mEventBus.post(new TurnedOffEvent());
                 break;
             case BluetoothAdapter.STATE_TURNING_OFF:
-                Log.d(getClass().getSimpleName(), "Turning Bluetooth off...");
+                mEventBus.post(new TurningOffEvent());
                 break;
             case BluetoothAdapter.STATE_ON:
-                Log.d(getClass().getSimpleName(), "Bluetooth on");
+                mEventBus.post(new TurnedOnEvent());
                 break;
             case BluetoothAdapter.STATE_TURNING_ON:
-                Log.d(getClass().getSimpleName(), "Turning Bluetooth on...");
+                mEventBus.post(new TurningOnEvent());
                 break;
         }
     }
