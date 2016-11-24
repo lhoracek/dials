@@ -12,7 +12,8 @@ import javax.inject.Singleton;
 
 import cz.lhoracek.android.dials.activity.MainActivity;
 import cz.lhoracek.android.dials.fragment.DialsFragment;
-import cz.lhoracek.android.dials.receiver.BluetoothStateBroadcastReceiver;
+import cz.lhoracek.android.dials.receiver.BluetoothStateReceiver;
+import cz.lhoracek.android.dials.receiver.PowerConnectedReceiver;
 import cz.lhoracek.android.dials.service.BluetoothService;
 import dagger.Component;
 
@@ -26,7 +27,8 @@ public interface AppComponent {
     void inject(BluetoothService service);
 
     /* Receivers */
-    void inject(BluetoothStateBroadcastReceiver receiver);
+    void inject(BluetoothStateReceiver receiver);
+    void inject(PowerConnectedReceiver receiver);
 
     /* Fragments */
     void inject(DialsFragment fragment);

@@ -19,19 +19,17 @@ import cz.lhoracek.android.dials.events.bluetooth.TurningOnEvent;
  * Created by horaclu2 on 24/11/16.
  */
 
-public class BluetoothStateBroadcastReceiver extends BroadcastReceiver {
+public class BluetoothStateReceiver extends BroadcastReceiver {
 
     @Inject EventBus mEventBus;
 
-    public BluetoothStateBroadcastReceiver() {
+    public BluetoothStateReceiver() {
         App.component().inject(this);
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE,
-                BluetoothAdapter.ERROR);
-        switch (state) {
+        switch (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)) {
             case BluetoothAdapter.STATE_OFF:
                 mEventBus.post(new TurnedOffEvent());
                 break;
