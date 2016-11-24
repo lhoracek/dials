@@ -39,6 +39,7 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
         startService(new Intent(this, BluetoothService.class));
+
     }
 
     @Override
