@@ -10,7 +10,7 @@ import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.events.bluetooth.TurnedOffEvent;
-import cz.lhoracek.android.dials.events.power.StateChangedEvent;
+import cz.lhoracek.android.dials.events.power.PowerStateChangedEvent;
 
 /**
  * Created by horaclu2 on 24/11/16.
@@ -34,6 +34,6 @@ public class PowerConnectedReceiver extends BroadcastReceiver {
                 mEventBus.post(new TurnedOffEvent());
                 break;
         }
-        mEventBus.post(new StateChangedEvent());
+        mEventBus.post(new PowerStateChangedEvent());
     }
 }

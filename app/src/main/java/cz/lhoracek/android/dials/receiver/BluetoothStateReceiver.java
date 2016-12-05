@@ -10,7 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
-import cz.lhoracek.android.dials.events.bluetooth.StateChangedEvent;
+import cz.lhoracek.android.dials.events.bluetooth.BluetoothStateChangedEvent;
 import cz.lhoracek.android.dials.events.bluetooth.TurnedOffEvent;
 import cz.lhoracek.android.dials.events.bluetooth.TurnedOnEvent;
 import cz.lhoracek.android.dials.events.bluetooth.TurningOffEvent;
@@ -44,6 +44,6 @@ public class BluetoothStateReceiver extends BroadcastReceiver {
                 mEventBus.post(new TurningOnEvent());
                 break;
         }
-        mEventBus.post(new StateChangedEvent());
+        mEventBus.post(new BluetoothStateChangedEvent());
     }
 }
