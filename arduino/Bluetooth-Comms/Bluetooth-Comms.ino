@@ -1,10 +1,19 @@
 #include <SoftwareSerial.h>
 #include <EEPROM.h>
 
+/**
+ * Motorcycle computer bluetooth interface
+ * 
+ * Expected maximums:
+ *  - 250Hz on RPM input -> 15.000 RPM
+ *  - 1080hz on Speed input -> 240kph (final gear sensor)
+ */
 SoftwareSerial bluetooth(10, 11);
 
+const unsigned long SECONDS_IN_MINUTE = 60;
 const unsigned long SECOND = 1 * 1000 * 1000;
 const unsigned long ZEROING = 200 * 1000;
+
 
 const byte rpmPin = 2;
 const byte speedPin = 3;
@@ -16,7 +25,8 @@ const byte enginePin = 7;
 const byte lowBeamPin = 6;
 const byte highBeamPin = 5;
 
-unsigned int odo = 0;
+unsigned int circumverence = 1850; // wheel circumverence in mm // load from EEPROM
+unsigned int odo = 0; // historical odo // read from EEPROM
 unsigned int rpm = 0;
 unsigned int gear = 0;
 float voltage = 0;
@@ -30,8 +40,8 @@ boolean engine = false;
 boolean lowBeam = false;
 boolean highBeam = false;
 
-const int smoothSizeRpm = 1;
-const int smoothSizeSpeed = 1;
+const int smoothSizeRpm = 5;
+const int smoothSizeSpeed = 3;
 unsigned long lastRpms[smoothSizeRpm];
 unsigned long lastSpeeds[smoothSizeSpeed];
 int readIndexRpm = 0;
@@ -142,7 +152,7 @@ void updateState() {
   for (int i = 0; i < smoothSizeRpm; i++) {
     sum = sum + lastRpms[i];
   }
-  rpm = SECOND / (sum / smoothSizeRpm);
+  rpm = SECONDS_IN_MINUTE * (SECOND / (sum / smoothSizeRpm));
 
   // reset values to zero
   if (lastSpeed > 0 &&  (getMicros() - lastSpeed) > ZEROING) {
@@ -177,13 +187,17 @@ void sendState() {
 }
 
 void printState() {
+  Serial.print("Status: ");
   Serial.print(rpm);
   Serial.print(" : ");
   Serial.println(speed);
+  Serial.print(" : ");
+  Serial.println(odo);
 }
 
 unsigned long time;
 char in;
+
 void loop()
 {
   updateState();
@@ -202,6 +216,9 @@ void loop()
     //    btBuffer[len] = in// Store it
     //    btBuffer[len+1] = '\0'; // Null terminate the string
   }
+
+
+  // TODO write odo to EEPROM
   interrupts();
   time = micros() -  time;
 
