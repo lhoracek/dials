@@ -21,6 +21,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import javax.inject.Singleton;
 
+import cz.lhoracek.android.dials.utils.GsonTypeAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
 
@@ -56,8 +57,7 @@ public class AppModule {
     @Singleton
     Gson provideGson(Context context) {
         return new GsonBuilder()
-                // TODO
-                //.registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
+                .registerTypeAdapterFactory(GsonTypeAdapterFactory.create())
                 .create();
     }
 
