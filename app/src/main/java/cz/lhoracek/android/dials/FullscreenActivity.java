@@ -9,7 +9,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.Bind;
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import cz.lhoracek.android.dials.tools.ControlTestTask;
 import cz.lhoracek.android.dials.tools.DigitTestTask;
@@ -48,23 +48,23 @@ public class FullscreenActivity extends AppCompatActivity implements View.OnSyst
         }
     };
 
-    @Bind(R.id.barView_fuel) BarView barViewFuel;
-    @Bind(R.id.barView_temp) BarView barViewTemp;
+    @BindView(R.id.barView_fuel) BarView barViewFuel;
+    @BindView(R.id.barView_temp) BarView barViewTemp;
 
-    @Bind(R.id.dialView_oilTemp) DialView dialViewOilTemp;
-    @Bind(R.id.dialView_voltage) DialView dialViewVoltage;
+    @BindView(R.id.dialView_oilTemp) DialView dialViewOilTemp;
+    @BindView(R.id.dialView_voltage) DialView dialViewVoltage;
 
-    @Bind(R.id.rpmView_revsGraph) RPMView rpmView;
+    @BindView(R.id.rpmView_revsGraph) RPMView rpmView;
 
-    @Bind(R.id.textView_speed) TextView textViewSpeed;
-    @Bind(R.id.textView_gear)  TextView textViewGear;
-    @Bind(R.id.textView_rpm)   TextView textViewRpm;
+    @BindView(R.id.textView_speed) TextView textViewSpeed;
+    @BindView(R.id.textView_gear)  TextView textViewGear;
+    @BindView(R.id.textView_rpm)   TextView textViewRpm;
 
-    @Bind(R.id.control_highBeam) ControlView controlViewHighBeam;
-    @Bind(R.id.control_lowBeam)  ControlView controlViewLowBeam;
-    @Bind(R.id.control_ignition) ControlView controlViewIgnition;
-    @Bind(R.id.control_neutral)  ControlView controlViewNeutral;
-    @Bind(R.id.control_turn)     ControlView controlViewTurn;
+    @BindView(R.id.control_highBeam) ControlView controlViewHighBeam;
+    @BindView(R.id.control_lowBeam)  ControlView controlViewLowBeam;
+    @BindView(R.id.control_ignition) ControlView controlViewIgnition;
+    @BindView(R.id.control_neutral)  ControlView controlViewNeutral;
+    @BindView(R.id.control_turn)     ControlView controlViewTurn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
