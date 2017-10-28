@@ -16,7 +16,6 @@ import android.support.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.ryanharter.auto.value.gson.AutoValueGsonTypeAdapterFactory;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -57,7 +56,8 @@ public class AppModule {
     @Singleton
     Gson provideGson(Context context) {
         return new GsonBuilder()
-                .registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
+                // TODO
+                //.registerTypeAdapterFactory(new AutoValueGsonTypeAdapterFactory())
                 .create();
     }
 

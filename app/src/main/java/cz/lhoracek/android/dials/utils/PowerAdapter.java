@@ -15,6 +15,10 @@ import javax.inject.Inject;
 public class PowerAdapter {
     @Inject Context mContext;
 
+    @Inject
+    public PowerAdapter() {
+    }
+
     public boolean isPlugged() {
         boolean isPlugged = false;
         Intent intent = mContext.registerReceiver(null, new IntentFilter(Intent.ACTION_BATTERY_CHANGED));

@@ -16,9 +16,6 @@ import cz.lhoracek.android.dials.databinding.FragmentDialsBinding;
 import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import cz.lhoracek.android.dials.model.DialsModel;
 
-/**
- * Created by horaclu2 on 09/02/16.
- */
 public class DialsFragment extends Fragment {
 
     public DialsFragment() {
