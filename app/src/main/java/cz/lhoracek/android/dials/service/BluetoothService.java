@@ -53,7 +53,6 @@ public class BluetoothService extends BaseService {
         App.component().inject(this);
     }
 
-
     @Override
     public void onCreate() {
         super.onCreate();

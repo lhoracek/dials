@@ -14,6 +14,7 @@ import javax.inject.Inject;
 
 import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.R;
+import cz.lhoracek.android.dials.service.BaseService;
 import cz.lhoracek.android.dials.service.BluetoothService;
 
 /**
@@ -22,12 +23,12 @@ import cz.lhoracek.android.dials.service.BluetoothService;
  */
 public class MainActivity extends BaseActivity {
 
-    public static final String UPDATE_BROADCAST  = "services_state_changed";
-    public static final int    REQUEST_ENABLE_BT = 1;
+    public static final String UPDATE_BROADCAST = "services_state_changed";
+    public static final int REQUEST_ENABLE_BT = 1;
 
     @Inject @Nullable BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
 
-    private boolean          isBound;
+    private boolean isBound;
     private BluetoothService bluetoothService;
 
     public MainActivity() {
@@ -59,8 +60,8 @@ public class MainActivity extends BaseActivity {
     private ServiceConnection myConnection = new ServiceConnection() {
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.d(getClass().getSimpleName(), "ServiceConnection connected");
-            BluetoothService.BluetoothBinder binder = (BluetoothService.BluetoothBinder) service;
-            bluetoothService = binder.getService();
+            BaseService.BaseBinder binder = (BaseService.BaseBinder) service;
+            bluetoothService = (BluetoothService) binder.getService();
             isBound = true;
             // TODO
         }
