@@ -56,7 +56,7 @@ public class BluetoothService extends BaseService {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(this.toString(), "Starting");
+        Log.d(this.toString(), "creating");
         stateChanged();
     }
 

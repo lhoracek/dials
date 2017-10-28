@@ -8,6 +8,8 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 
+import cz.lhoracek.android.dials.R;
+
 /**
  * Created by lhoracek on 1/25/16.
  */
@@ -56,7 +58,6 @@ public class RPMView extends ValueView {
         canvas.drawArc(mRectF, START_ANGLE, SWEEP_ANGLE - PAUSE, false, paint);
 
         int stepThousand = mMaxValue > 6000 ? 2 : 1;
-        int numberThousand = stepThousand * 2;
         float partDegrees = SWEEP_ANGLE / ((mMaxValue - mMinValue) / (stepThousand * 1000));
         float degree = 0;
         int thousand = 0;
@@ -73,9 +74,9 @@ public class RPMView extends ValueView {
                 path.arcTo(mRectF, START_ANGLE + degree + 1, 20);
                 path.close();
                 Color.argb(128, Color.red(mScaleColor), Color.green(mScaleColor), Color.blue(mScaleColor));
-                paint.setColor(Color.GRAY);
+                paint.setColor(getContext().getResources().getColor(R.color.scaleOffAccent));
                 paint.setTextAlign(Paint.Align.LEFT);
-                paint.setTextSize(30);
+                paint.setTextSize(50);
                 canvas.drawTextOnPath(String.valueOf(thousand), path, 0, 0, paint);
             }
 
