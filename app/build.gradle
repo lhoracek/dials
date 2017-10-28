@@ -5,20 +5,19 @@ ext {
     daggerLibVersion = '2.12'
     auto_value_parcel = '0.2.5'
     auto_value_gson = '0.6.0'
-    supportLibVersion = '25.4.0'
+    supportLibVersion = '26.0.0'
 }
 
 android {
-    compileSdkVersion 25
+    compileSdkVersion 26
     buildToolsVersion "26.0.2"
 
     defaultConfig {
         applicationId "cz.lhoracek.android.dials"
         minSdkVersion 22
-        targetSdkVersion 24
+        targetSdkVersion 25
         versionCode 1
         versionName "1.0"
-        vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
         debug {

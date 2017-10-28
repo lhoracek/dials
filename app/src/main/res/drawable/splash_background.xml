@@ -2,5 +2,5 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@color/black" android:gravity="fill"/>
 
-    <item android:gravity="center" android:drawable="@drawable/ic_gauge"/>
+    <item android:gravity="center" android:width="200dp" android:height="200dp" android:drawable="@drawable/ic_gauge"/>
 </layer-list>
