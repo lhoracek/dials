@@ -21,6 +21,7 @@ public class RPMView extends ValueView {
     private static final float PAUSE = 0.5f;
     private static final int START_ANGLE = 195;
     private static final int SWEEP_ANGLE = 90;
+    private static final int NUMBERS_OFFSET = 50;
     private int mOvalWidth = 0;
     private int mOvalHeight = 0;
 
@@ -70,7 +71,7 @@ public class RPMView extends ValueView {
 
             if (thousand % 4 == 0) {
                 path.reset();
-                mRectF.set(mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * SCALE_WIDTH + 33, mOvalWidth * (1 - SCALE_WIDTH) - 33, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - 33);
+                mRectF.set(mOvalWidth * SCALE_WIDTH + NUMBERS_OFFSET, mOvalWidth * SCALE_WIDTH + NUMBERS_OFFSET, mOvalWidth * (1 - SCALE_WIDTH) - NUMBERS_OFFSET, mOvalHeight - (mOvalWidth * SCALE_WIDTH) - NUMBERS_OFFSET);
                 path.arcTo(mRectF, START_ANGLE + degree + 1, 20);
                 path.close();
                 Color.argb(128, Color.red(mScaleColor), Color.green(mScaleColor), Color.blue(mScaleColor));
