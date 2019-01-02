@@ -7,7 +7,7 @@ import android.content.Intent;
 import cz.lhoracek.android.dials.service.BluetoothService;
 
 /**
- * Created by horaclu2 on 24/05/16.
+ * Created by lhoracek on 24/05/16.
  */
 public class BootFinishedReceiver extends BroadcastReceiver {
 

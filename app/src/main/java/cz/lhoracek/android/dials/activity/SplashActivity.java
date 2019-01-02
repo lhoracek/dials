@@ -6,7 +6,7 @@ import android.os.Handler;
 import android.util.Log;
 
 /**
- * Created by horaclu2 on 22/11/16.
+ * Created by lhoracek on 22/11/16.
  */
 
 public class SplashActivity extends BaseActivity {

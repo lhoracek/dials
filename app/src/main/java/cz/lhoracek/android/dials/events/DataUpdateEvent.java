@@ -3,7 +3,7 @@ package cz.lhoracek.android.dials.events;
 import cz.lhoracek.android.dials.model.Values;
 
 /**
- * Created by horaclu2 on 19/11/16.
+ * Created by lhoracek on 19/11/16.
  */
 
 public class DataUpdateEvent {

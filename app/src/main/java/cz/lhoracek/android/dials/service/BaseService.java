@@ -11,7 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 
 /**
- * Created by horaclu2 on 05/12/16.
+ * Created by lhoracek on 05/12/16.
  */
 
 public abstract class BaseService extends Service {

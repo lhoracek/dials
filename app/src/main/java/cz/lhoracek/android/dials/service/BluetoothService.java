@@ -38,7 +38,7 @@ import rx.functions.Action1;
 import rx.schedulers.Schedulers;
 
 /**
- * Created by horaclu2 on 09/02/16.
+ * Created by lhoracek on 09/02/16.
  */
 public class BluetoothService extends BaseService {
 

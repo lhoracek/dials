@@ -9,7 +9,7 @@ import android.os.Build;
 import javax.inject.Inject;
 
 /**
- * Created by horaclu2 on 24/11/16.
+ * Created by lhoracek on 24/11/16.
  */
 
 public class PowerAdapter {

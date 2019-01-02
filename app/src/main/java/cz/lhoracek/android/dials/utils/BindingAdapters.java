@@ -9,7 +9,7 @@ import cz.lhoracek.android.dials.views.RPMView;
 import cz.lhoracek.android.dials.views.ValueView;
 
 /**
- * Created by horaclu2 on 19/11/16.
+ * Created by lhoracek on 19/11/16.
  */
 
 public class BindingAdapters {

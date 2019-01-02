@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 
 /**
- * Created by horaclu2 on 19/11/16.
+ * Created by lhoracek on 19/11/16.
  */
 
 @AutoValue

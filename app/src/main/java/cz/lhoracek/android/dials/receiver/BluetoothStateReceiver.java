@@ -17,7 +17,7 @@ import cz.lhoracek.android.dials.events.bluetooth.TurningOffEvent;
 import cz.lhoracek.android.dials.events.bluetooth.TurningOnEvent;
 
 /**
- * Created by horaclu2 on 24/11/16.
+ * Created by lhoracek on 24/11/16.
  */
 
 public class BluetoothStateReceiver extends BroadcastReceiver {
