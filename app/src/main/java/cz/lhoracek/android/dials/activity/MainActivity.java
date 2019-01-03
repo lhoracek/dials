@@ -31,7 +31,7 @@ public class MainActivity extends BaseActivity {
     @Inject @Named("serviceClass") Class<?> serviceClass;
 
     private boolean isBound;
-    private Service bindingService;
+    private BaseService bindingService;
 
     public MainActivity() {
         App.component().inject(this);
@@ -47,7 +47,7 @@ public class MainActivity extends BaseActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        bindService(new Intent(this, BluetoothService.class), myConnection, Context.BIND_AUTO_CREATE);
+        bindService(new Intent(this, serviceClass), myConnection, Context.BIND_AUTO_CREATE);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.d(getClass().getSimpleName(), "ServiceConnection connected");
             BaseService.BaseBinder binder = (BaseService.BaseBinder) service;
-            bindingService = (BluetoothService) binder.getService();
+            bindingService = binder.getService();
             isBound = true;
         }
 

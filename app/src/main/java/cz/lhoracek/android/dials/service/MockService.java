@@ -65,11 +65,13 @@ public class MockService extends BaseService {
 
         int state = (int) millis;
         boolean on = ((state / 20) % 2) > 0;
+        int gearNumber = ((state / 10) % 7);
+        Integer gear = gearNumber > 0 ? gearNumber : null;
         Values v = Values.create(
-                ((state / 10) % 6) + 1,
+                gear,
                 (state * 10) % 20000,
                 (state * 100) % 13000,
-                (((state ) % 50) + 100) / 10.0f,
+                (((state ) % 50) + 110) / 10.0f,
                 ((state * 5) % 900) / 10.0f,
                 ((state* 2) + 50)  % 100,
                 (((state * 3) % 100) / 2.0f)  + 60,

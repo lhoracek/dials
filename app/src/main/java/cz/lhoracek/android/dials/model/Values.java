@@ -1,5 +1,7 @@
 package cz.lhoracek.android.dials.model;
 
+import android.support.annotation.Nullable;
+
 import com.google.auto.value.AutoValue;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
@@ -14,12 +16,12 @@ public abstract class Values {
         return new AutoValue_Values.GsonTypeAdapter(gson);
     }
 
-    public abstract Integer getGear();
+    public abstract @Nullable Integer getGear();
     public abstract Integer getOdo();
     public abstract Integer getRpm();
     public abstract Float   getVoltage();
     public abstract Float   getOilTemp();
-    public abstract Float   getFuel();
+    public abstract Integer getFuel();
     public abstract Float   getTemp();
     public abstract Integer getSpeed();
     public abstract Boolean getTurnlight();
@@ -28,19 +30,19 @@ public abstract class Values {
     public abstract Boolean getLowBeam();
     public abstract Boolean getHighBeam();
 
-    public static Values create(int gear,
-                         int odo,
-                         int rpm,
-                         float voltage,
-                         float oilTemp,
-                         float fuel,
-                         float temp,
-                         int speed,
-                         boolean turnlight,
-                         boolean neutral,
-                         boolean engine,
-                         boolean lowBeam,
-                         boolean highBeam){
+    public static Values create(Integer gear,
+                                Integer odo,
+                                Integer rpm,
+                                Float voltage,
+                                Float oilTemp,
+                                Integer fuel,
+                                Float temp,
+                                Integer speed,
+                                Boolean turnlight,
+                                Boolean neutral,
+                                Boolean engine,
+                                Boolean lowBeam,
+                                Boolean highBeam){
         return new AutoValue_Values(gear, odo, rpm, voltage, oilTemp, fuel, temp, speed, turnlight, neutral, engine, lowBeam, highBeam);
     }
 }
