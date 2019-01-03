@@ -11,6 +11,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import javax.inject.Inject;
+
 import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.databinding.FragmentDialsBinding;
 import cz.lhoracek.android.dials.events.DataUpdateEvent;
@@ -23,7 +25,8 @@ public class DialsFragment extends Fragment {
     }
 
     private FragmentDialsBinding mBinding;
-    private DialsModel           viewModel;
+    private DialsModel viewModel;
+    @Inject EventBus mEventBus;
 
     @Nullable
     @Override
@@ -46,12 +49,12 @@ public class DialsFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        EventBus.getDefault().register(this);
+        mEventBus.register(this);
     }
 
     @Override
     public void onPause() {
-        EventBus.getDefault().unregister(this);
+        mEventBus.unregister(this);
         super.onPause();
     }
 }
