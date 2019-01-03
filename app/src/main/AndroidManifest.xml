@@ -34,6 +34,10 @@
             android:name=".service.BluetoothService"
             android:exported="false"/>
 
+        <service
+            android:name=".service.MockService"
+            android:exported="false"/>
+
         <receiver android:name=".receiver.BluetoothStateReceiver">
             <intent-filter>
                 <action android:name="android.bluetooth.adapter.action.STATE_CHANGED"/>

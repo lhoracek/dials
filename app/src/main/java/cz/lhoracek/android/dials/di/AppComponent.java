@@ -15,6 +15,7 @@ import cz.lhoracek.android.dials.fragment.DialsFragment;
 import cz.lhoracek.android.dials.receiver.BluetoothStateReceiver;
 import cz.lhoracek.android.dials.receiver.PowerConnectedReceiver;
 import cz.lhoracek.android.dials.service.BluetoothService;
+import cz.lhoracek.android.dials.service.MockService;
 import dagger.Component;
 
 @Singleton
@@ -25,6 +26,7 @@ public interface AppComponent {
 
     /* Services */
     void inject(BluetoothService service);
+    void inject(MockService service);
 
     /* Receivers */
     void inject(BluetoothStateReceiver receiver);

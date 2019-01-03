@@ -27,4 +27,20 @@ public abstract class Values {
     public abstract Boolean getEngine();
     public abstract Boolean getLowBeam();
     public abstract Boolean getHighBeam();
+
+    public static Values create(int gear,
+                         int odo,
+                         int rpm,
+                         float voltage,
+                         float oilTemp,
+                         float fuel,
+                         float temp,
+                         int speed,
+                         boolean turnlight,
+                         boolean neutral,
+                         boolean engine,
+                         boolean lowBeam,
+                         boolean highBeam){
+        return new AutoValue_Values(gear, odo, rpm, voltage, oilTemp, fuel, temp, speed, turnlight, neutral, engine, lowBeam, highBeam);
+    }
 }

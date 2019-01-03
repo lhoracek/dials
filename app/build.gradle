@@ -5,17 +5,17 @@ ext {
     daggerLibVersion = '2.12'
     auto_value_parcel = '0.2.5'
     auto_value_gson = '0.6.0'
-    supportLibVersion = '26.1.0'
+    supportLibVersion = '28.0.0'
 }
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "27.0.1"
+    compileSdkVersion 28
+    buildToolsVersion '28.0.2'
 
     defaultConfig {
         applicationId "cz.lhoracek.android.dials"
         minSdkVersion 22
-        targetSdkVersion 25
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
     }
@@ -31,38 +31,42 @@ android {
     dataBinding {
         enabled = true
     }
+    compileOptions {
+        sourceCompatibility = '1.8'
+        targetCompatibility = '1.8'
+    }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile 'junit:junit:4.12'
-    compile "com.android.support:appcompat-v7:$supportLibVersion"
-    compile "com.android.support:support-v4:$supportLibVersion"
-    compile "com.android.support:percent:$supportLibVersion"
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    testImplementation 'junit:junit:4.12'
+    implementation "com.android.support:appcompat-v7:$supportLibVersion"
+    implementation "com.android.support:support-v4:$supportLibVersion"
+    implementation "com.android.support:percent:$supportLibVersion"
 
     //dagger2
     // fix for crash with combination of auto-value extensions and dagger
-    compile "com.google.dagger:dagger:$daggerLibVersion"
+    implementation "com.google.dagger:dagger:$daggerLibVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerLibVersion"
 
 
     annotationProcessor 'com.ryanharter.auto.value:auto-value-gson:0.6.0'
 
     //autovalue
-    provided "com.google.auto.value:auto-value:$autoValueVersion"
+    compileOnly "com.google.auto.value:auto-value:$autoValueVersion"
     annotationProcessor "com.google.auto.value:auto-value:$autoValueVersion"
     annotationProcessor "com.ryanharter.auto.value:auto-value-parcel:$auto_value_parcel"
-    compile "com.ryanharter.auto.value:auto-value-parcel-adapter:$auto_value_parcel"
+    implementation "com.ryanharter.auto.value:auto-value-parcel-adapter:$auto_value_parcel"
     annotationProcessor "com.ryanharter.auto.value:auto-value-gson:$auto_value_gson"
-    provided "com.ryanharter.auto.value:auto-value-gson-annotations:$auto_value_gson"
+    compileOnly "com.ryanharter.auto.value:auto-value-gson-annotations:$auto_value_gson"
 
     //libraries
-    compile 'org.greenrobot:eventbus:3.0.0'
-    compile 'com.github.ivbaranov:rxbluetooth:0.1.2'
-    compile "com.google.code.gson:gson:2.6.2"
+    implementation 'org.greenrobot:eventbus:3.0.0'
+    implementation 'com.github.ivbaranov:rxbluetooth:0.1.2'
+    implementation "com.google.code.gson:gson:2.6.2"
 
     // leak canary
-    debugCompile 'com.squareup.leakcanary:leakcanary-android:1.5'
-    releaseCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
-    testCompile 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.5'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
+    testImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.5'
 }

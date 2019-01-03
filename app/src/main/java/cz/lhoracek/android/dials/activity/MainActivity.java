@@ -1,5 +1,6 @@
 package cz.lhoracek.android.dials.activity;
 
+import android.app.Service;
 import android.bluetooth.BluetoothAdapter;
 import android.content.ComponentName;
 import android.content.Context;
@@ -11,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.R;
@@ -26,10 +28,10 @@ public class MainActivity extends BaseActivity {
     public static final String UPDATE_BROADCAST = "services_state_changed";
     public static final int REQUEST_ENABLE_BT = 1;
 
-    @Inject @Nullable BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+    @Inject @Named("serviceClass") Class<?> serviceClass;
 
     private boolean isBound;
-    private BluetoothService bluetoothService;
+    private Service bindingService;
 
     public MainActivity() {
         App.component().inject(this);
@@ -39,8 +41,7 @@ public class MainActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen);
-        startService(new Intent(this, BluetoothService.class));
-
+        startService(new Intent(this, serviceClass));
     }
 
     @Override
@@ -61,16 +62,14 @@ public class MainActivity extends BaseActivity {
         public void onServiceConnected(ComponentName className, IBinder service) {
             Log.d(getClass().getSimpleName(), "ServiceConnection connected");
             BaseService.BaseBinder binder = (BaseService.BaseBinder) service;
-            bluetoothService = (BluetoothService) binder.getService();
+            bindingService = (BluetoothService) binder.getService();
             isBound = true;
-            // TODO
         }
 
         public void onServiceDisconnected(ComponentName arg0) {
             Log.d(getClass().getSimpleName(), "ServiceConnection disconnected");
-            bluetoothService = null;
+            bindingService = null;
             isBound = false;
-            // TODO
         }
     };
 }

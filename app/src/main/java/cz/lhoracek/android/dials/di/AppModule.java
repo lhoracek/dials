@@ -19,8 +19,10 @@ import com.google.gson.GsonBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 
+import cz.lhoracek.android.dials.service.MockService;
 import cz.lhoracek.android.dials.utils.GsonTypeAdapterFactory;
 import dagger.Module;
 import dagger.Provides;
@@ -59,6 +61,13 @@ public class AppModule {
         return new GsonBuilder()
                 .registerTypeAdapterFactory(GsonTypeAdapterFactory.create())
                 .create();
+    }
+
+    @Provides
+    @Singleton
+    @Named("serviceClass")
+    Class<?> provideServiceClass() {
+        return MockService.class;
     }
 
     @Provides

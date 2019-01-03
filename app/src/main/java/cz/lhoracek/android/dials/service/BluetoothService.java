@@ -43,11 +43,11 @@ import rx.schedulers.Schedulers;
 public class BluetoothService extends BaseService {
 
     private boolean connected = false;
-    private boolean bound     = false;
+    private boolean bound = false;
 
-    @Inject           Gson             mGson;
+    @Inject Gson mGson;
     @Inject @Nullable BluetoothAdapter mBluetoothAdapter;
-    @Inject           PowerAdapter     mPowerAdapter;
+    @Inject PowerAdapter mPowerAdapter;
 
     public BluetoothService() {
         App.component().inject(this);
@@ -82,14 +82,15 @@ public class BluetoothService extends BaseService {
         // TODO shit
 
 
-        if (mPowerAdapter.isPlugged()){
-            if(bound){
-                hideNotification();
-            }else {
-                showNotification();
-            }
-
+        // TODO figure out why this was in
+        // TODO display bluetooth state
+        //if (mPowerAdapter.isPlugged()){
+        if (bound) {
+            hideNotification();
+        } else {
+            showNotification();
         }
+        //}
     }
 
     @Override
@@ -104,6 +105,7 @@ public class BluetoothService extends BaseService {
         if (connected) {
             stopBluetooth();
         }
+        // TODO unbind
         stateChanged();
     }
 
@@ -111,71 +113,69 @@ public class BluetoothService extends BaseService {
         Log.d(this.toString(), "starting bluetooth");
 
         Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        if (pairedDevices.size() > 0) {
-            // Loop through paired devices
-            for (BluetoothDevice device : pairedDevices) {
-                // Add the name and address to an array adapter to show in a ListView
-                Log.d(this.toString(), "BT Device: " + device.getName());
-                // TODO find mine
-                if (device.getName().equals("HC-06")) {
-                    UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-                    RxBluetooth rxBluetooth = new RxBluetooth(this);
-                    rxBluetooth.observeConnectDevice(device, uuid)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribeOn(Schedulers.io())
-                            .subscribe(new Action1<BluetoothSocket>() {
-                                @Override
-                                public void call(BluetoothSocket socket) {
-                                    // TODO save socket?
-                                    connected = true;
-                                    // Connected to the device, do anything with the socket
-                                    Log.d(this.toString(), "Connected to device");
+        for (BluetoothDevice device : pairedDevices) {
+            // Add the name and address to an array adapter to show in a ListView
+            Log.d(this.toString(), "BT Device: " + device.getName());
+            // TODO find mine
+            if (device.getName().equals("HC-06")) {
+                Log.d(this.toString(), "Found mine");
+                UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+                RxBluetooth rxBluetooth = new RxBluetooth(this);
+                rxBluetooth.observeConnectDevice(device, uuid)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Action1<BluetoothSocket>() {
+                            @Override
+                            public void call(BluetoothSocket socket) {
+                                // TODO save socket?
+                                connected = true;
+                                // Connected to the device, do anything with the socket
+                                Log.d(this.toString(), "Connected to device");
 
-                                    try {
-                                        final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
+                                try {
+                                    final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
 
-                                        // observe strings received
-                                        bluetoothConnection.observeStringStream()
-                                                .observeOn(AndroidSchedulers.mainThread())
-                                                .subscribeOn(Schedulers.io())
-                                                .subscribe(new Action1<String>() {
-                                                    @Override
-                                                    public void call(String string) {
-                                                        //Log.d(this.toString(), "Incomming " + string);
-                                                        try {
-                                                            Values values = mGson.fromJson(string, Values.class);
-                                                            EventBus.getDefault().post(new DataUpdateEvent(values));
-                                                        } catch (Exception e) {
-                                                            Log.e(this.toString(), "Error receiving " + string, e);
-                                                        }
+                                    // observe strings received
+                                    bluetoothConnection.observeStringStream()
+                                            .observeOn(AndroidSchedulers.mainThread())
+                                            .subscribeOn(Schedulers.io())
+                                            .subscribe(new Action1<String>() {
+                                                @Override
+                                                public void call(String string) {
+                                                    //Log.d(this.toString(), "Incomming " + string);
+                                                    try {
+                                                        Values values = mGson.fromJson(string, Values.class);
+                                                        BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
+                                                    } catch (Exception e) {
+                                                        Log.e(this.toString(), "Error receiving " + string, e);
                                                     }
-                                                }, new Action1<Throwable>() {
-                                                    @Override
-                                                    public void call(Throwable throwable) {
-                                                        Log.e(this.toString(), "Error receiving");
-                                                        throwable.printStackTrace();
-                                                        // Error occured
-                                                        // TODO
-                                                        startBluetooth();
-                                                    }
-                                                });
-                                    } catch (Exception e) {
-                                        Log.e(this.toString(), "Error");
-                                        e.printStackTrace();
-                                    }
+                                                }
+                                            }, new Action1<Throwable>() {
+                                                @Override
+                                                public void call(Throwable throwable) {
+                                                    Log.e(this.toString(), "Error receiving");
+                                                    throwable.printStackTrace();
+                                                    // Error occured
+                                                    // TODO
+                                                    startBluetooth();
+                                                }
+                                            });
+                                } catch (Exception e) {
+                                    Log.e(this.toString(), "Error");
+                                    e.printStackTrace();
                                 }
-                            }, new Action1<Throwable>() {
-                                @Override
-                                public void call(Throwable throwable) {
-                                    // Error occured
+                            }
+                        }, new Action1<Throwable>() {
+                            @Override
+                            public void call(Throwable throwable) {
+                                // Error occured
 
-                                    Log.e(this.toString(), "Error socket");
-                                    throwable.printStackTrace();
-                                    // TODO
-                                    startBluetooth();
-                                }
-                            });
-                }
+                                Log.e(this.toString(), "Error socket");
+                                throwable.printStackTrace();
+                                // TODO
+                                startBluetooth();
+                            }
+                        });
             }
         }
     }
@@ -199,6 +199,10 @@ public class BluetoothService extends BaseService {
                 .setSmallIcon(R.drawable.ic_gauge_notification)
                 .setContentTitle(getString(R.string.notification_running))
                 .setContentText(getString(R.string.notification_running_detail))
+                // TODO action to turn it off
+                // intent to call BroadcastReceiver
+                // .addAction(R.mipmap.ic_launcher,"Turn OFF",pi)
+
                 .build();
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(R.id.notification, notification);

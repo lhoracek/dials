@@ -16,7 +16,7 @@ import javax.inject.Inject;
 
 public abstract class BaseService extends Service {
     private final IBinder myBinder = new BaseBinder();
-    @Inject EventBus mEventBus;
+    protected @Inject EventBus mEventBus;
 
     public class BaseBinder extends Binder {
         public BaseService getService() {
