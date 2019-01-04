@@ -84,8 +84,8 @@
                                                       android:layout_height="wrap_content"
                                                       android:gravity="center"
                                                       android:maxLines="1"
-                                                      android:text="@{viewModel.values.gear != null &amp;&amp; viewModel.values.gear > 0 ? String.valueOf(viewModel.values.gear) : null, default=3}"
-                                                      android:textColor="@color/numberColor"
+                                                      android:text='@{viewModel.values.gear != null ? String.valueOf(viewModel.values.gear) : ".", default=3}'
+                                                      android:textColor="@{viewModel.values.gear != null ? @color/numberColor : @color/controlGreen, default=@color/numberColor}"
                                                       android:textSize="120dp"
                                                       app:customFont="dd.otf"
                                                       app:layout_marginLeftPercent="2%"
