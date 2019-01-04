@@ -14,6 +14,7 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.support.annotation.Nullable;
 
+import com.github.ivbaranov.rxbluetooth.RxBluetooth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -68,7 +69,8 @@ public class AppModule {
     @Singleton
     @Named("serviceClass")
     Class<?> provideServiceClass() {
-        return BluetoothService.class;
+        return MockService.class;
+        //return BluetoothService.class;
     }
 
     @Provides
@@ -76,5 +78,11 @@ public class AppModule {
     @Nullable
     BluetoothAdapter provideBluetoothAdapter() {
         return BluetoothAdapter.getDefaultAdapter();
+    }
+
+    @Provides
+    @Singleton
+    RxBluetooth provideRxBluetooth(Context context) {
+        return new RxBluetooth(context);
     }
 }

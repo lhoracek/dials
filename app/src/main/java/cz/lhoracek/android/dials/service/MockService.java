@@ -5,6 +5,7 @@ import android.util.Log;
 import com.google.gson.Gson;
 
 import org.greenrobot.eventbus.Subscribe;
+import org.reactivestreams.Subscription;
 
 import java.util.concurrent.TimeUnit;
 
@@ -13,10 +14,10 @@ import javax.inject.Inject;
 import cz.lhoracek.android.dials.App;
 import cz.lhoracek.android.dials.events.DataUpdateEvent;
 import cz.lhoracek.android.dials.model.Values;
-import rx.Observable;
-import rx.Subscription;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lhoracek on 09/02/16.
@@ -24,7 +25,7 @@ import rx.schedulers.Schedulers;
 public class MockService extends BaseService {
 
     @Inject Gson mGson;
-    private Subscription mSubscription;
+    private Disposable mSubscription;
 
     public MockService() {
         App.component().inject(this);
@@ -47,7 +48,7 @@ public class MockService extends BaseService {
     @Override
     protected void bindingChanged(boolean bound) {
         if (mSubscription != null) {
-            mSubscription.unsubscribe();
+            mSubscription.dispose();
             mSubscription = null;
         }
         if (bound) {
@@ -80,7 +81,6 @@ public class MockService extends BaseService {
                 !on,
                 on
         );
-        Log.d(this.toString(), mGson.toJson(v));
         this.mEventBus.post(new DataUpdateEvent(v));
     }
 }

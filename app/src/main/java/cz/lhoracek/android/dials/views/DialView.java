@@ -7,6 +7,7 @@ import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.util.AttributeSet;
+import android.util.Log;
 
 import java.text.DecimalFormat;
 
@@ -58,7 +59,7 @@ public class DialView extends ValueView {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH * 1.5f);
 
-        c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
+        c.drawText(mValue >= 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
         super.onDraw(c);
     }
 
@@ -67,8 +68,8 @@ public class DialView extends ValueView {
         float value = Math.max(0, Math.min(mMaxValue , mValue) - mMinValue) / range;
 
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff);
-        //Log.d(getClass().getSimpleName(), "Min " + mMinValue + " max " + mMaxValue + " Range " + range + " real value " + mValue + " Value " + value);
-        drawArc(canvas, START_ANGLE, SWEEP_ANGLE * value, mPaint, ((mValue > mWarningMaxValue) || (mValue < mWarningMinValue)) ? mWarningColor : mColor);
+        Log.d(getClass().getSimpleName(), "Min " + mMinValue + " max " + mMaxValue + " Range " + range + " real value " + mValue + " Value " + value);
+        drawArc(canvas, START_ANGLE,(SWEEP_ANGLE * value) + 1, mPaint, ((mValue > mWarningMaxValue) || (mValue < mWarningMinValue)) ? mWarningColor : mColor);
     }
 
     private void drawArc(Canvas canvas, float startAngle, float sweepDegrees, Paint paint, int mainColor) {
