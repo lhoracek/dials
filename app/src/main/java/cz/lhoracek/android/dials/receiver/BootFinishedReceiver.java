@@ -13,6 +13,7 @@ public class BootFinishedReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        context.startService(new Intent(context,BluetoothService.class));
+        // TODO decide what to do on start of the device
+        //context.startService(new Intent(context,BluetoothService.class));
     }
 }
