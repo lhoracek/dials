@@ -22,6 +22,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import cz.lhoracek.android.dials.service.BluetoothService;
 import cz.lhoracek.android.dials.service.MockService;
 import cz.lhoracek.android.dials.utils.GsonTypeAdapterFactory;
 import dagger.Module;
@@ -67,7 +68,7 @@ public class AppModule {
     @Singleton
     @Named("serviceClass")
     Class<?> provideServiceClass() {
-        return MockService.class;
+        return BluetoothService.class;
     }
 
     @Provides

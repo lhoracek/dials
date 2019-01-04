@@ -80,6 +80,7 @@ public class MockService extends BaseService {
                 !on,
                 on
         );
+        Log.d(this.toString(), mGson.toJson(v));
         this.mEventBus.post(new DataUpdateEvent(v));
     }
 }

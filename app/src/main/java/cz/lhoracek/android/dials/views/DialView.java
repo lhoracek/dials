@@ -58,7 +58,6 @@ public class DialView extends ValueView {
         mPaint.setTextAlign(Paint.Align.CENTER);
         mPaint.setTextSize(getHeight() * WIDTH * 1.5f);
 
-        // TODO formatting withou new instances (caching?)
         c.drawText(mValue > 0 ? formatter.format(mValue) : "", xPos, yPos, mPaint);
         super.onDraw(c);
     }

@@ -58,6 +58,7 @@ public class BluetoothService extends BaseService {
         super.onCreate();
         Log.d(this.toString(), "creating");
         stateChanged();
+        startBluetooth();
     }
 
     @Override
@@ -117,65 +118,61 @@ public class BluetoothService extends BaseService {
             // Add the name and address to an array adapter to show in a ListView
             Log.d(this.toString(), "BT Device: " + device.getName());
             // TODO find mine
-            if (device.getName().equals("HC-06")) {
+            if (device.getName().equals("ESP32test")) {
                 Log.d(this.toString(), "Found mine");
                 UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
                 RxBluetooth rxBluetooth = new RxBluetooth(this);
                 rxBluetooth.observeConnectDevice(device, uuid)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.io())
-                        .subscribe(new Action1<BluetoothSocket>() {
-                            @Override
-                            public void call(BluetoothSocket socket) {
-                                // TODO save socket?
-                                connected = true;
-                                // Connected to the device, do anything with the socket
-                                Log.d(this.toString(), "Connected to device");
+                        .subscribe(socket -> {
+                                    // TODO save socket?
+                                    connected = true;
+                                    // Connected to the device, do anything with the socket
+                                    Log.d(this.toString(), "Connected to device");
 
-                                try {
-                                    final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
+                                    try {
+                                        final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
 
-                                    // observe strings received
-                                    bluetoothConnection.observeStringStream()
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.io())
-                                            .subscribe(new Action1<String>() {
-                                                @Override
-                                                public void call(String string) {
-                                                    //Log.d(this.toString(), "Incomming " + string);
-                                                    try {
-                                                        Values values = mGson.fromJson(string, Values.class);
-                                                        BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
-                                                    } catch (Exception e) {
-                                                        Log.e(this.toString(), "Error receiving " + string, e);
-                                                    }
-                                                }
-                                            }, new Action1<Throwable>() {
-                                                @Override
-                                                public void call(Throwable throwable) {
-                                                    Log.e(this.toString(), "Error receiving");
-                                                    throwable.printStackTrace();
-                                                    // Error occured
-                                                    // TODO
-                                                    startBluetooth();
-                                                }
-                                            });
-                                } catch (Exception e) {
-                                    Log.e(this.toString(), "Error");
-                                    e.printStackTrace();
+                                        // observe strings received
+                                        bluetoothConnection.observeStringStream('$')
+                                                .observeOn(AndroidSchedulers.mainThread())
+                                                .subscribeOn(Schedulers.io())
+                                                .subscribe(string -> {
+                                                            //Log.d(this.toString(), "Incomming " + string);
+                                                            if(string.isEmpty()) {
+                                                                Log.d(this.toString(), "Empty string received ");
+                                                                return;
+                                                            }
+                                                            try {
+                                                                Values values = mGson.fromJson(string, Values.class);
+                                                              //  Log.d(this.toString(), "Value decoded");
+                                                                BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
+                                                            } catch (Exception e) {
+                                                                Log.e(this.toString(), "Error receiving " + string, e);
+                                                            }
+                                                        }
+                                                        , throwable -> {
+                                                            Log.e(this.toString(), "Error receiving");
+                                                            throwable.printStackTrace();
+                                                            // Error occured
+                                                            // TODO
+                                                            startBluetooth();
+                                                        });
+                                    } catch (Exception e) {
+                                        Log.e(this.toString(), "Error");
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
-                        }, new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                // Error occured
+                                , throwable -> {
+                                    // Error occured
 
-                                Log.e(this.toString(), "Error socket");
-                                throwable.printStackTrace();
-                                // TODO
-                                startBluetooth();
-                            }
-                        });
+                                    Log.e(this.toString(), "Error socket");
+                                    throwable.printStackTrace();
+                                    // TODO
+                                    startBluetooth();
+                                }
+                        );
             }
         }
     }
