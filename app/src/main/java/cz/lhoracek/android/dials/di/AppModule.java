@@ -14,6 +14,7 @@ import android.content.Context;
 import android.location.LocationManager;
 import android.support.annotation.Nullable;
 
+import com.github.ivbaranov.rxbluetooth.RxBluetooth;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -22,6 +23,7 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import cz.lhoracek.android.dials.service.BluetoothService;
 import cz.lhoracek.android.dials.service.MockService;
 import cz.lhoracek.android.dials.utils.GsonTypeAdapterFactory;
 import dagger.Module;
@@ -68,6 +70,7 @@ public class AppModule {
     @Named("serviceClass")
     Class<?> provideServiceClass() {
         return MockService.class;
+        //return BluetoothService.class;
     }
 
     @Provides
@@ -75,5 +78,11 @@ public class AppModule {
     @Nullable
     BluetoothAdapter provideBluetoothAdapter() {
         return BluetoothAdapter.getDefaultAdapter();
+    }
+
+    @Provides
+    @Singleton
+    RxBluetooth provideRxBluetooth(Context context) {
+        return new RxBluetooth(context);
     }
 }

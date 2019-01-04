@@ -5,7 +5,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
@@ -16,12 +15,11 @@ import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
 import com.github.ivbaranov.rxbluetooth.RxBluetooth;
 import com.google.gson.Gson;
 
-import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -33,9 +31,9 @@ import cz.lhoracek.android.dials.events.bluetooth.BluetoothStateChangedEvent;
 import cz.lhoracek.android.dials.events.power.PowerStateChangedEvent;
 import cz.lhoracek.android.dials.model.Values;
 import cz.lhoracek.android.dials.utils.PowerAdapter;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
-import rx.schedulers.Schedulers;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * Created by lhoracek on 09/02/16.
@@ -48,6 +46,7 @@ public class BluetoothService extends BaseService {
     @Inject Gson mGson;
     @Inject @Nullable BluetoothAdapter mBluetoothAdapter;
     @Inject PowerAdapter mPowerAdapter;
+    @Inject RxBluetooth rxBluetooth;
 
     public BluetoothService() {
         App.component().inject(this);
@@ -58,6 +57,7 @@ public class BluetoothService extends BaseService {
         super.onCreate();
         Log.d(this.toString(), "creating");
         stateChanged();
+        startBluetooth();
     }
 
     @Override
@@ -109,75 +109,84 @@ public class BluetoothService extends BaseService {
         stateChanged();
     }
 
+
+    private Disposable disposableSubscription;
+
     public void startBluetooth() {
         Log.d(this.toString(), "starting bluetooth");
 
-        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
-        for (BluetoothDevice device : pairedDevices) {
-            // Add the name and address to an array adapter to show in a ListView
-            Log.d(this.toString(), "BT Device: " + device.getName());
-            // TODO find mine
-            if (device.getName().equals("HC-06")) {
-                Log.d(this.toString(), "Found mine");
-                UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-                RxBluetooth rxBluetooth = new RxBluetooth(this);
-                rxBluetooth.observeConnectDevice(device, uuid)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.io())
-                        .subscribe(new Action1<BluetoothSocket>() {
-                            @Override
-                            public void call(BluetoothSocket socket) {
-                                // TODO save socket?
-                                connected = true;
-                                // Connected to the device, do anything with the socket
-                                Log.d(this.toString(), "Connected to device");
-
-                                try {
-                                    final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
-
-                                    // observe strings received
-                                    bluetoothConnection.observeStringStream()
-                                            .observeOn(AndroidSchedulers.mainThread())
-                                            .subscribeOn(Schedulers.io())
-                                            .subscribe(new Action1<String>() {
-                                                @Override
-                                                public void call(String string) {
-                                                    //Log.d(this.toString(), "Incomming " + string);
-                                                    try {
-                                                        Values values = mGson.fromJson(string, Values.class);
-                                                        BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
-                                                    } catch (Exception e) {
-                                                        Log.e(this.toString(), "Error receiving " + string, e);
-                                                    }
-                                                }
-                                            }, new Action1<Throwable>() {
-                                                @Override
-                                                public void call(Throwable throwable) {
-                                                    Log.e(this.toString(), "Error receiving");
-                                                    throwable.printStackTrace();
-                                                    // Error occured
-                                                    // TODO
-                                                    startBluetooth();
-                                                }
-                                            });
-                                } catch (Exception e) {
-                                    Log.e(this.toString(), "Error");
-                                    e.printStackTrace();
-                                }
-                            }
-                        }, new Action1<Throwable>() {
-                            @Override
-                            public void call(Throwable throwable) {
-                                // Error occured
-
-                                Log.e(this.toString(), "Error socket");
-                                throwable.printStackTrace();
-                                // TODO
-                                startBluetooth();
+        if (!rxBluetooth.isBluetoothAvailable()) {
+            // handle the lack of bluetooth support
+            Log.d(this.toString(), "Bluetooth is not supported!");
+        } else {
+            // check if bluetooth is currently enabled and ready for use
+            if (!rxBluetooth.isBluetoothEnabled()) {
+                Log.d(this.toString(), "Bluetooth should be enabled first!");
+            } else {
+                Log.d(this.toString(), "Going observing");
+                disposableSubscription = rxBluetooth.observeDevices()
+                        .observeOn(Schedulers.computation())
+                        .subscribeOn(Schedulers.computation())
+                        .subscribe(bluetoothDevice -> {
+                            Log.d(this.toString(), "Device found: " + bluetoothDevice.getAddress() + " - " + bluetoothDevice.getName());
+                            if ("ESP32test".equals(bluetoothDevice.getName())) {
+                                connectToDevice(bluetoothDevice);
                             }
                         });
+                rxBluetooth.startDiscovery();
+                Log.d(this.toString(), "Doscovery started");
             }
         }
+    }
+
+    private void connectToDevice(BluetoothDevice bluetoothDevice) {
+        Log.d(this.toString(), "Found mine");
+        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+
+        rxBluetooth
+                .connectAsClient(bluetoothDevice, uuid)
+                .subscribe(socket -> {
+            connected = true;
+            // Connected to the device, do anything with the socket
+            Log.d(this.toString(), "Connected to device");
+            final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
+
+            // observe strings received
+            bluetoothConnection.observeStringStream()
+                    .subscribeOn(Schedulers.computation())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(string -> {
+                                Log.d(this.toString(), "Incomming " + string);
+                                if (string.isEmpty()) {
+                                    Log.d(this.toString(), "Empty string received ");
+                                    return;
+                                }
+                                try {
+                                Values values = mGson.fromJson(string.replace("$", ""), Values.class);
+                                Log.d(this.toString(), "Value decoded");
+
+                                BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
+                                } catch (Exception e) {
+                                    Log.e(this.toString(), "Error receiving " + string, e);
+                                }
+                            }
+                            , throwable -> {
+                                Log.e(this.toString(), "Error receiving from stream");
+                                throwable.printStackTrace();
+                                // Error occured
+                                // TODO
+                                //startBluetooth();
+                            });
+
+        }, throwable -> {
+            // Error occured
+
+            Log.e(this.toString(), "Error socket");
+            throwable.printStackTrace();
+            // TODO
+            connected = false;
+            startBluetooth();
+        });
     }
 
     public void stopBluetooth() {

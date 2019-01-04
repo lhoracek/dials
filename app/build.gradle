@@ -63,7 +63,7 @@ dependencies {
 
     //libraries
     implementation 'org.greenrobot:eventbus:3.0.0'
-    implementation 'com.github.ivbaranov:rxbluetooth:0.1.2'
+    implementation 'com.github.ivbaranov:rxbluetooth2:2.0.4'
     implementation "com.google.code.gson:gson:2.6.2"
 
     // leak canary
