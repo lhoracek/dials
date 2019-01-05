@@ -39,6 +39,7 @@ public class DialView extends ValueView {
         formatter = new DecimalFormat("#,###.0");
         formatter.setMaximumFractionDigits(mDecimals);
         formatter.setMinimumFractionDigits(mDecimals);
+        formatter.setMinimumIntegerDigits(1);
         a.recycle();
     }
 

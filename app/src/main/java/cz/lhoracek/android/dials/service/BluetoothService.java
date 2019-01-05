@@ -18,6 +18,7 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.util.Observable;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -126,34 +127,17 @@ public class BluetoothService extends BaseService {
             return;
         }
 
-        Log.d(this.toString(), "Going observing");
-        disposableSubscription = rxBluetooth.observeDevices()
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
-                .filter(bluetoothDevice -> "ESP32test".equals(bluetoothDevice.getName()))
-                .doOnEach(bluetoothDevice -> Log.i(this.toString(), "Found device"))
-                .subscribe(bluetoothDevice -> subscribeToDevice(bluetoothDevice));
-
-        rxBluetooth.startDiscovery();
-        Log.d(this.toString(), "Discovery started");
-    }
-
-    private void subscribeToDevice(BluetoothDevice bluetoothDevice) {
-        rxBluetooth.connectAsClient(bluetoothDevice, getSppUUID())
-                .toObservable()
+        io.reactivex.Observable.just(mBluetoothAdapter.getRemoteDevice("B4:E6:2D:8E:52:9F"))
+                .flatMap(bluetoothDevice -> rxBluetooth.connectAsClient(bluetoothDevice, getSppUUID()).toObservable())
                 .map(socket -> new BluetoothConnection(socket))
-                .doOnEach(string -> Log.i(this.toString(), "Got socket"))
-                .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream().toObservable())
-                .doOnEach(string -> Log.i(this.toString(), "Got stream"))
+                .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream('#').toObservable())
                 .filter(string -> !string.isEmpty())
-                .filter(string -> !string.contains("}{"))
-                //.doOnEach(string -> Log.i(this.toString(), "Received " + string))
                 .map(string -> mGson.fromJson(string, Values.class))
                 .subscribeOn(Schedulers.computation())
                 .observeOn(Schedulers.computation())
                 .retry()
-                .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values))
-                        , throwable -> Log.i(this.toString(), "Error receiving"));
+                .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values)),
+                        throwable -> Log.e(this.toString(), "Error receiving", throwable));
     }
 
     private UUID getSppUUID() {
