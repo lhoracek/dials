@@ -4,11 +4,9 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothAdapter;
-import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.github.ivbaranov.rxbluetooth.BluetoothConnection;
@@ -18,9 +16,7 @@ import com.google.gson.Gson;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.util.Observable;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
@@ -32,7 +28,6 @@ import cz.lhoracek.android.dials.events.bluetooth.BluetoothStateChangedEvent;
 import cz.lhoracek.android.dials.events.power.PowerStateChangedEvent;
 import cz.lhoracek.android.dials.model.Values;
 import cz.lhoracek.android.dials.utils.PowerAdapter;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -40,15 +35,17 @@ import io.reactivex.schedulers.Schedulers;
  * Created by lhoracek on 09/02/16.
  */
 public class BluetoothService extends BaseService {
-    public static final String SERIAL_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+    public static final UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    public static final String DEVICE_ADDRESS = "B4:E6:2D:8E:52:9F";
 
-    private boolean connected = false;
     private boolean bound = false;
 
     @Inject Gson mGson;
     @Inject @Nullable BluetoothAdapter mBluetoothAdapter;
     @Inject PowerAdapter mPowerAdapter;
     @Inject RxBluetooth rxBluetooth;
+
+    Disposable bluetoothSubscription = null;
 
     public BluetoothService() {
         App.component().inject(this);
@@ -59,7 +56,6 @@ public class BluetoothService extends BaseService {
         super.onCreate();
         Log.d(this.toString(), "creating");
         stateChanged();
-        startBluetooth();
     }
 
     @Override
@@ -81,18 +77,14 @@ public class BluetoothService extends BaseService {
 
 
     protected void stateChanged() {
-        // TODO shit
-
-
-        // TODO figure out why this was in
-        // TODO display bluetooth state
-        //if (mPowerAdapter.isPlugged()){
+        // todo take power state into account
         if (bound) {
+            startBluetooth();
             hideNotification();
         } else {
+            stopBluetooth();
             showNotification();
         }
-        //}
     }
 
     @Override
@@ -104,17 +96,17 @@ public class BluetoothService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (connected) {
-            stopBluetooth();
-        }
-        // TODO unbind
-        stateChanged();
+
+        hideNotification();
     }
 
+    private void stopBluetooth() {
+        if (bluetoothSubscription != null) {
+            bluetoothSubscription.dispose();
+        }
+    }
 
-    private Disposable disposableSubscription;
-
-    public void startBluetooth() {
+    private void startBluetooth() {
         Log.d(this.toString(), "starting bluetooth");
 
         if (!rxBluetooth.isBluetoothAvailable()) {
@@ -127,8 +119,8 @@ public class BluetoothService extends BaseService {
             return;
         }
 
-        io.reactivex.Observable.just(mBluetoothAdapter.getRemoteDevice("B4:E6:2D:8E:52:9F"))
-                .flatMap(bluetoothDevice -> rxBluetooth.connectAsClient(bluetoothDevice, getSppUUID()).toObservable())
+        bluetoothSubscription = io.reactivex.Observable.just(mBluetoothAdapter.getRemoteDevice(DEVICE_ADDRESS))
+                .flatMap(bluetoothDevice -> rxBluetooth.connectAsClient(bluetoothDevice, SERIAL_UUID).toObservable())
                 .map(socket -> new BluetoothConnection(socket))
                 .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream('#').toObservable())
                 .filter(string -> !string.isEmpty())
@@ -138,19 +130,6 @@ public class BluetoothService extends BaseService {
                 .retry()
                 .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values)),
                         throwable -> Log.e(this.toString(), "Error receiving", throwable));
-    }
-
-    private UUID getSppUUID() {
-        return UUID.fromString(SERIAL_UUID);
-    }
-
-    public void stopBluetooth() {
-        Log.d(this.toString(), "stopping bluetooth");
-
-        // TODO unsubscribe
-
-        LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.UPDATE_BROADCAST));
-        hideNotification();
     }
 
     private void showNotification() {

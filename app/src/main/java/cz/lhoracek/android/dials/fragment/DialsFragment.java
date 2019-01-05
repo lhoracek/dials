@@ -43,7 +43,7 @@ public class DialsFragment extends Fragment {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onMessageEvent(DataUpdateEvent event) {
-        viewModel.setValues(event.getValues());
+        viewModel.getValues().set(event.getValues());
     }
 
     @Override
