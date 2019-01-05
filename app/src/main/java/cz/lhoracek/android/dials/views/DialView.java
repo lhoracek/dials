@@ -68,7 +68,7 @@ public class DialView extends ValueView {
         float value = Math.max(0, Math.min(mMaxValue , mValue) - mMinValue) / range;
 
         drawArc(canvas, START_ANGLE, SWEEP_ANGLE, mPaint, mColorOff);
-        Log.d(getClass().getSimpleName(), "Min " + mMinValue + " max " + mMaxValue + " Range " + range + " real value " + mValue + " Value " + value);
+        //Log.d(getClass().getSimpleName(), "Min " + mMinValue + " max " + mMaxValue + " Range " + range + " real value " + mValue + " Value " + value);
         drawArc(canvas, START_ANGLE,(SWEEP_ANGLE * value) + 1, mPaint, ((mValue > mWarningMaxValue) || (mValue < mWarningMinValue)) ? mWarningColor : mColor);
     }
 

@@ -39,6 +39,7 @@ import io.reactivex.schedulers.Schedulers;
  * Created by lhoracek on 09/02/16.
  */
 public class BluetoothService extends BaseService {
+    public static final String SERIAL_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 
     private boolean connected = false;
     private boolean bound = false;
@@ -116,83 +117,53 @@ public class BluetoothService extends BaseService {
         Log.d(this.toString(), "starting bluetooth");
 
         if (!rxBluetooth.isBluetoothAvailable()) {
-            // handle the lack of bluetooth support
             Log.d(this.toString(), "Bluetooth is not supported!");
-        } else {
-            // check if bluetooth is currently enabled and ready for use
-            if (!rxBluetooth.isBluetoothEnabled()) {
-                Log.d(this.toString(), "Bluetooth should be enabled first!");
-            } else {
-                Log.d(this.toString(), "Going observing");
-                disposableSubscription = rxBluetooth.observeDevices()
-                        .observeOn(Schedulers.computation())
-                        .subscribeOn(Schedulers.computation())
-                        .subscribe(bluetoothDevice -> {
-                            Log.d(this.toString(), "Device found: " + bluetoothDevice.getAddress() + " - " + bluetoothDevice.getName());
-                            if ("ESP32test".equals(bluetoothDevice.getName())) {
-                                connectToDevice(bluetoothDevice);
-                            }
-                        });
-                rxBluetooth.startDiscovery();
-                Log.d(this.toString(), "Doscovery started");
-            }
+            return;
         }
+
+        if (!rxBluetooth.isBluetoothEnabled()) {
+            Log.d(this.toString(), "Bluetooth should be enabled first!");
+            return;
+        }
+
+        Log.d(this.toString(), "Going observing");
+        disposableSubscription = rxBluetooth.observeDevices()
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .filter(bluetoothDevice -> "ESP32test".equals(bluetoothDevice.getName()))
+                .doOnEach(bluetoothDevice -> Log.i(this.toString(), "Found device"))
+                .subscribe(bluetoothDevice -> subscribeToDevice(bluetoothDevice));
+
+        rxBluetooth.startDiscovery();
+        Log.d(this.toString(), "Discovery started");
     }
 
-    private void connectToDevice(BluetoothDevice bluetoothDevice) {
-        Log.d(this.toString(), "Found mine");
-        UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
+    private void subscribeToDevice(BluetoothDevice bluetoothDevice) {
+        rxBluetooth.connectAsClient(bluetoothDevice, getSppUUID())
+                .toObservable()
+                .map(socket -> new BluetoothConnection(socket))
+                .doOnEach(string -> Log.i(this.toString(), "Got socket"))
+                .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream().toObservable())
+                .doOnEach(string -> Log.i(this.toString(), "Got stream"))
+                .filter(string -> !string.isEmpty())
+                .filter(string -> !string.contains("}{"))
+                //.doOnEach(string -> Log.i(this.toString(), "Received " + string))
+                .map(string -> mGson.fromJson(string, Values.class))
+                .subscribeOn(Schedulers.computation())
+                .observeOn(Schedulers.computation())
+                .retry()
+                .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values))
+                        , throwable -> Log.i(this.toString(), "Error receiving"));
+    }
 
-        rxBluetooth
-                .connectAsClient(bluetoothDevice, uuid)
-                .subscribe(socket -> {
-            connected = true;
-            // Connected to the device, do anything with the socket
-            Log.d(this.toString(), "Connected to device");
-            final BluetoothConnection bluetoothConnection = new BluetoothConnection(socket);
-
-            // observe strings received
-            bluetoothConnection.observeStringStream()
-                    .subscribeOn(Schedulers.computation())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(string -> {
-                                Log.d(this.toString(), "Incomming " + string);
-                                if (string.isEmpty()) {
-                                    Log.d(this.toString(), "Empty string received ");
-                                    return;
-                                }
-                                try {
-                                Values values = mGson.fromJson(string.replace("$", ""), Values.class);
-                                Log.d(this.toString(), "Value decoded");
-
-                                BluetoothService.this.mEventBus.post(new DataUpdateEvent(values));
-                                } catch (Exception e) {
-                                    Log.e(this.toString(), "Error receiving " + string, e);
-                                }
-                            }
-                            , throwable -> {
-                                Log.e(this.toString(), "Error receiving from stream");
-                                throwable.printStackTrace();
-                                // Error occured
-                                // TODO
-                                //startBluetooth();
-                            });
-
-        }, throwable -> {
-            // Error occured
-
-            Log.e(this.toString(), "Error socket");
-            throwable.printStackTrace();
-            // TODO
-            connected = false;
-            startBluetooth();
-        });
+    private UUID getSppUUID() {
+        return UUID.fromString(SERIAL_UUID);
     }
 
     public void stopBluetooth() {
         Log.d(this.toString(), "stopping bluetooth");
 
-        // TODO
+        // TODO unsubscribe
 
         LocalBroadcastManager.getInstance(this).sendBroadcast(new Intent(MainActivity.UPDATE_BROADCAST));
         hideNotification();
