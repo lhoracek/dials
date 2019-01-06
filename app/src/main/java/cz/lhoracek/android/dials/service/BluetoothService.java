@@ -125,8 +125,8 @@ public class BluetoothService extends BaseService {
                 .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream('#').toObservable())
                 .filter(string -> !string.isEmpty())
                 .map(string -> mGson.fromJson(string, Values.class))
-                .subscribeOn(Schedulers.computation())
-                .observeOn(Schedulers.computation())
+                .subscribeOn(Schedulers.io())
+                .observeOn(Schedulers.io())
                 .retry()
                 .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values)),
                         throwable -> Log.e(this.toString(), "Error receiving", throwable));
