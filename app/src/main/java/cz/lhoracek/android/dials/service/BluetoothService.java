@@ -28,6 +28,7 @@ import cz.lhoracek.android.dials.events.bluetooth.BluetoothStateChangedEvent;
 import cz.lhoracek.android.dials.events.power.PowerStateChangedEvent;
 import cz.lhoracek.android.dials.model.Values;
 import cz.lhoracek.android.dials.utils.PowerAdapter;
+import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
 
@@ -55,7 +56,6 @@ public class BluetoothService extends BaseService {
     public void onCreate() {
         super.onCreate();
         Log.d(this.toString(), "creating");
-        stateChanged();
     }
 
     @Override
@@ -96,13 +96,13 @@ public class BluetoothService extends BaseService {
     @Override
     public void onDestroy() {
         super.onDestroy();
-
         hideNotification();
     }
 
     private void stopBluetooth() {
         if (bluetoothSubscription != null) {
             bluetoothSubscription.dispose();
+            bluetoothSubscription = null;
         }
     }
 
@@ -110,26 +110,30 @@ public class BluetoothService extends BaseService {
         Log.d(this.toString(), "starting bluetooth");
 
         if (!rxBluetooth.isBluetoothAvailable()) {
-            Log.d(this.toString(), "Bluetooth is not supported!");
+            Log.e(this.toString(), "Bluetooth is not supported!");
             return;
         }
 
         if (!rxBluetooth.isBluetoothEnabled()) {
-            Log.d(this.toString(), "Bluetooth should be enabled first!");
+            Log.e(this.toString(), "Bluetooth should be enabled first!");
             return;
         }
 
-        bluetoothSubscription = io.reactivex.Observable.just(mBluetoothAdapter.getRemoteDevice(DEVICE_ADDRESS))
+        if(bluetoothSubscription != null){
+            Log.e(this.toString(), "Already connected!");
+            return;
+        }
+        bluetoothSubscription = Observable.just(mBluetoothAdapter.getRemoteDevice(DEVICE_ADDRESS))
                 .flatMap(bluetoothDevice -> rxBluetooth.connectAsClient(bluetoothDevice, SERIAL_UUID).toObservable())
                 .map(socket -> new BluetoothConnection(socket))
+                .doOnNext(bluetoothConnectionNotification -> Log.i(this.toString(), "Bluetooth socket open"))
                 .flatMap(bluetoothConnection -> bluetoothConnection.observeStringStream('#').toObservable())
                 .filter(string -> !string.isEmpty())
                 .map(string -> mGson.fromJson(string, Values.class))
                 .subscribeOn(Schedulers.io())
                 .observeOn(Schedulers.io())
-                .retry()
-                .subscribe(values -> BluetoothService.this.mEventBus.post(new DataUpdateEvent(values)),
-                        throwable -> Log.e(this.toString(), "Error receiving", throwable));
+                .retry((integer, throwable) -> {Log.e(this.toString(), "Got error", throwable); return true;})
+                .subscribe(values -> this.mEventBus.post(new DataUpdateEvent(values)));
     }
 
     private void showNotification() {
