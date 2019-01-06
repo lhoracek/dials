@@ -37,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class BluetoothService extends BaseService {
     public static final UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    public static final String DEVICE_ADDRESS = "B4:E6:2D:8E:52:9F";
+    public static final String DEVICE_ADDRESS = "30:AE:A4:27:84:56";
 
     private boolean bound = false;
 
@@ -78,6 +78,7 @@ public class BluetoothService extends BaseService {
 
     protected void stateChanged() {
         // todo take power state into account
+        // todo take bluetooth state into account
         if (bound) {
             startBluetooth();
             hideNotification();
@@ -100,6 +101,7 @@ public class BluetoothService extends BaseService {
     }
 
     private void stopBluetooth() {
+        Log.d(this.toString(), "stopping bluetooth");
         if (bluetoothSubscription != null) {
             bluetoothSubscription.dispose();
             bluetoothSubscription = null;
