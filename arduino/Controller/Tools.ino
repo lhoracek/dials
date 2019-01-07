@@ -4,9 +4,8 @@ void sampleData(State* state, ulong speed_pips, float rpm_micros, float speed_mi
   // TODO compute gear from rpm and 
   state->gear = 0;
 
-  // TODO correct computing
-  state->speed = (1000000/(float)speed_micros);
-  state->rpm = ((1000000/(float)rpm_micros)/4)*60;
+  state->speed = (1000000/(float)speed_micros)/4.5; // per internet (360Hz = 80kph), will be finalized later
+  state->rpm = ((1000000/(float)rpm_micros)/4)*60; // 4 pulses per revolution
   
   state->voltage = (analogRead(VOLTAGE_PIN)/(float)255) * VOLTAGE_MAX ;
   state->fuel = (analogRead(VOLTAGE_PIN)/(float)255) * VOLTAGE_MAX;
