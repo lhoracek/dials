@@ -3,12 +3,17 @@ void sampleData(State* state, ulong speed_pips, float rpm_micros, float speed_mi
   state->odo = 0;
   // TODO compute gear from rpm and 
   state->gear = 0;
-    
+
+  // TODO correct computing
+  state->speed = (1000000/(float)speed_micros);
+  state->rpm = ((1000000/(float)rpm_micros)/4)*60;
+  
   state->voltage = (analogRead(VOLTAGE_PIN)/(float)255) * VOLTAGE_MAX ;
   state->fuel = (analogRead(VOLTAGE_PIN)/(float)255) * VOLTAGE_MAX;
   state->temp = (analogRead(TEMP_PIN)/(float)255) * TEMP_MAX;
 
-  state->turnlight = digitalRead(TURNLIGHT_PIN);
+  state->turnLeft = digitalRead(TURN_LEFT_PIN);
+  state->turnRight = digitalRead(TURN_RIGHT_PIN);
   state->neutral = digitalRead(NEUTRAL_PIN);
   state->ignition = digitalRead(IGNITION_PIN);
   state->lowBeam = digitalRead(LOWBEAM_PIN);
@@ -27,7 +32,8 @@ void sendData(State* state, BluetoothSerial &s){
     +",\"fuel\":"+state->fuel
     +",\"temp\":"+state->temp
     +",\"speed\":"+state->speed
-    +",\"turnlight\":"+ (state->turnlight ? "true":"false")
+    +",\"turnLeft\":"+ (state->turnLeft ? "true":"false")
+    +",\"turnRight\":"+ (state->turnRight ? "true":"false")
     +",\"neutral\":"+ (state->neutral ? "true":"false")
     +",\"ignition\":"+ (state->ignition ? "true":"false")
     +",\"lowBeam\":"+ (state->lowBeam ? "true":"false")

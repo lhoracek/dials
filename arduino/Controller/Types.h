@@ -11,7 +11,8 @@ typedef struct {
   int speed;
   boolean oilPressureLow;
   boolean sidestand;
-  boolean turnlight;
+  boolean turnRight;
+  boolean turnLeft;
   boolean neutral;
   boolean ignition;
   boolean lowBeam;

@@ -1,19 +1,19 @@
 void drawDisplay(State* state, OLED &s, BluetoothSerial &bts){
     display.clear();
-  
-    drawControl(82,0, state->turnlight, "T");
-    drawControl(98,0, state->ignition, "I");
-    drawControl(90,10, state->neutral, "N");
+
+    drawControl(66,0, state->turnLeft, "<");
+    drawControl(82,0, state->neutral, "N");
+    drawControl(98,0, state->turnRight, ">");
+    drawControl(58,10, state->ignition, "I");
+    drawControl(74, 10, bts.hasClient(), "R"); 
+    drawControl(90,10, state->highBeam, "S");
+    drawControl(66,20, state->highBeam, "O");
     drawControl(82,20, state->lowBeam, "L");
     drawControl(98,20, state->highBeam, "H");
-    drawControl(66,0, state->highBeam, "S");
-    drawControl(66,20, state->highBeam, "O");
-    drawControl(74, 10, bts.hasClient(), "R"); 
-    drawControl(58,10, state->highBeam, "X");
-    
-    drawBar(0, 33, 37, state->voltage, 11, 16, "Vol");
-    drawBar(40, 33, 88, state->temp, 60, 110, "Temp");
-    drawBar(0, 44, 128, state->fuel, 0, 100, "Fuel"); 
+
+    drawBar(0, 33, 128, state->fuel, 0, 100, "Fuel"); 
+    drawBar(0, 44, 37, state->voltage, 11, 16, "Vol");
+    drawBar(40, 44, 88, state->temp, 60, 110, "Temp");
     drawBar(0, 55, 128, state-> rpm, 0, 12000, "RPM");
     
     drawValue(0,14, state->speed, "%3d", true);
@@ -23,8 +23,6 @@ void drawDisplay(State* state, OLED &s, BluetoothSerial &bts){
     drawValue(10,0, state->odo, "%6dkm", false);
     drawValue(113,8, state->gear, "%1d", true);
     display.draw_rectangle(112,5, 127, 24,OLED::HOLLOW);
-
-    
     
     display.display();
 }

@@ -7,7 +7,8 @@ void mockData(State* state, long pips) {
   state->fuel = abs( ((pips / 8) + 50) % 200-100);
   state->temp = (abs((((pips / 8) % 200)-100)) / 2.0f) + 60;
   state->speed = (pips/5) % 250;
-  state->turnlight = ((pips / 200) % 2) > 0;
+  state->turnLeft = ((pips / 200) % 2) > 0;
+  state->turnRight = ((pips / 200) % 2) < 1;
   state->neutral = ((pips / 200) % 2) < 1;
   state->ignition = ((pips / 200) % 2) > 0;
   state->lowBeam = ((pips / 200) % 2) <1 ;

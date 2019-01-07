@@ -16,8 +16,8 @@
 
 
 // FRQUENCY
-#define RPM_PIN 32
-#define SPEED_PIN 33
+#define RPM_PIN 15
+#define SPEED_PIN 13
 // ANALOG
 #define VOLTAGE_PIN 36
 #define TEMP_PIN 37
@@ -26,7 +26,8 @@
 // DIGITAL
 #define OIL_PRESSURE_PIN 34
 #define SIDESTAND_PIN 35
-#define TURNLIGHT_PIN 25
+#define TURN_LEFT_PIN 25
+#define TURN_RIGHT_PIN 25
 #define NEUTRAL_PIN 26
 #define IGNITION_PIN 27
 #define LOWBEAM_PIN 14
@@ -43,28 +44,28 @@ BluetoothSerial SerialBT;
 State state;
 OLED display = OLED(5, 4, 1, 0x3C, 128, 64);
 
-long rpmMicros;
-long speedMicros;
-ulong speedPips;
+long rpmMicros = LONG_MAX;
+long speedMicros = LONG_MAX;
+ulong speedPips = 0;
 
-long lastRpmMicros;
+ulong lastRpmMicros;
 void IRAM_ATTR handleRpmInterrupt() {
-  long mics= micros();
+  ulong mics= micros();
   portENTER_CRITICAL_ISR(&rpmMux);
     // TODO smoothing
     rpmMicros = mics - lastRpmMicros;
+    lastRpmMicros = mics;
   portEXIT_CRITICAL_ISR(&rpmMux);
-  lastRpmMicros = mics;
 }
 
-long lastSpeedMicros;
+ulong lastSpeedMicros;
 void IRAM_ATTR handleSpeedInterrupt() {
-  long mics= micros();
+  ulong mics= micros();
   portENTER_CRITICAL_ISR(&speedMux);
     speedMicros = mics - lastSpeedMicros;
     speedPips++;
+    lastSpeedMicros = mics;
   portEXIT_CRITICAL_ISR(&speedMux);
-  lastSpeedMicros = mics;
 }
 
 long btLastTime = 0;
@@ -73,23 +74,26 @@ long eepromLastTime = 0;
 
 void setup() {
 
+  pinMode(RPM_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(RPM_PIN), handleRpmInterrupt, RISING);
+  pinMode(SPEED_PIN, INPUT);
+  attachInterrupt(digitalPinToInterrupt(SPEED_PIN), handleSpeedInterrupt, RISING);
+
+  pinMode(TURN_LEFT_PIN, INPUT);
+  pinMode(TURN_RIGHT_PIN, INPUT);
+  pinMode(NEUTRAL_PIN, INPUT);
+  pinMode(OIL_PRESSURE_PIN, INPUT);
+  pinMode(SIDESTAND_PIN, INPUT);
+  pinMode(IGNITION_PIN, INPUT);
+  pinMode(LOWBEAM_PIN, INPUT);
+  pinMode(HIGHBEAM_PIN, INPUT);
+
   Serial.begin(115200);
   SerialBT.begin(BT_NAME);
   Serial.println("The device started, now you can pair it with bluetooth!");
   pinMode (LED_PIN, OUTPUT);
 
-  pinMode(RPM_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(RPM_PIN), handleRpmInterrupt, RISING);
-  pinMode(SPEED_PIN, INPUT_PULLUP);
-  attachInterrupt(digitalPinToInterrupt(SPEED_PIN), handleSpeedInterrupt, RISING);
-
-  pinMode(OIL_PRESSURE_PIN, INPUT_PULLUP);
-  pinMode(SIDESTAND_PIN, INPUT_PULLUP);
-  pinMode(TURNLIGHT_PIN, INPUT_PULLUP);
-  pinMode(NEUTRAL_PIN, INPUT_PULLUP);
-  pinMode(IGNITION_PIN, INPUT_PULLUP);
-  pinMode(LOWBEAM_PIN, INPUT_PULLUP);
-  pinMode(HIGHBEAM_PIN, INPUT_PULLUP);
+ 
 
   display.begin();  
   display.set_contrast(255);
@@ -103,16 +107,19 @@ void loop() {
     long speedMics;
     long speedPs;
 
+    ulong now = micros();
     portENTER_CRITICAL(&rpmMux);
-      rpmMics = rpmMicros;
+      ulong lastRpm = now - lastRpmMicros;
+      rpmMics = lastRpm > rpmMicros ? lastRpm : rpmMicros;
     portEXIT_CRITICAL(&rpmMux);
     portENTER_CRITICAL(&speedMux);
-      speedMics = speedMicros;
+      ulong lastSpeed = now - lastSpeedMicros;
+      speedMics = lastSpeed > speedMicros ? lastSpeed : speedMicros;
       speedPs = speedPips++;
     portEXIT_CRITICAL(&speedMux);
-
-    //sampleData(&state, speedPs, rpmMics, speedMics);
-    mockData(&state, speedPips);
+    
+    sampleData(&state, speedPs, rpmMics, speedMics);
+    //mockData(&state, speedPips);
     sendData(&state, SerialBT);
   }
 
@@ -129,7 +136,6 @@ void loop() {
 
   // not needed anymore
   delay(1);
-  Serial.println(speedPips);
 }
 
 boolean timePassed(long *lastTime, int threshold){
