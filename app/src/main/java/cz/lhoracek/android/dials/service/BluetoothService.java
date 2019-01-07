@@ -37,7 +37,7 @@ import io.reactivex.schedulers.Schedulers;
  */
 public class BluetoothService extends BaseService {
     public static final UUID SERIAL_UUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
-    public static final String DEVICE_ADDRESS = "30:AE:A4:27:84:56";
+    public static final String DEVICE_ADDRESS = "24:0A:C4:06:90:52";
 
     private boolean bound = false;
 
