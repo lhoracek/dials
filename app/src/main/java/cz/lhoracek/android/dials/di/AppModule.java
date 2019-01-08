@@ -69,8 +69,8 @@ public class AppModule {
     @Singleton
     @Named("serviceClass")
     Class<?> provideServiceClass() {
-        return MockService.class;
-        //return BluetoothService.class;
+        //return MockService.class;
+        return BluetoothService.class;
     }
 
     @Provides
